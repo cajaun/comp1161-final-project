@@ -64,7 +64,10 @@ public class Bus implements Comparable<Bus> {
     }
 
     public int compareTo(Bus other) {
+
         return this.getId() - other.getId();
+
+        
     }
 
     public boolean available(Date date) {
