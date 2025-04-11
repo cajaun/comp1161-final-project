@@ -18,4 +18,8 @@ public class Grade {
     public void setGrade(double grade) {
         this.grade = grade;
     }
+
+    public void setSubject (String subject) {
+        this.subject = subject;
+    }
 }
