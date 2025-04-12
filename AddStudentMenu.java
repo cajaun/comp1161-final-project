@@ -2,7 +2,6 @@ import javax.swing.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,12 +13,16 @@ import org.json.JSONTokener;
 
 public class AddStudentMenu extends JPanel {
     private JTextField firstNameField, lastNameField, idField, programField, enrollmentYearField;
-    private JComboBox<String> statusComboBox, facultyComboBox;
+    private JComboBox<String>  facultyComboBox;
     private List<JComboBox<String>> courseComboBoxes = new ArrayList<>();
-    private List<JTextField> gradeFields = new ArrayList<>();
+    private List<JComboBox<String>> gradeComboBoxes = new ArrayList<>();
     private JButton saveButton, closeButton;
     private MainMenu mainMenu;
     private List<String> courseList;
+
+    private final String[] LETTER_GRADES = {
+        "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "F1", "F2", "F3"
+    };
 
     public AddStudentMenu(MainMenu mainMenu, List<Student> students) {
         this.mainMenu = mainMenu;
@@ -85,19 +88,12 @@ public class AddStudentMenu extends JPanel {
         enrollmentYearField = new JTextField(12);
         formPanel.add(enrollmentYearField, gbc);
 
-        // Status
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        formPanel.add(new JLabel("Status:"), gbc);
-        gbc.gridx = 1;
-        statusComboBox = new JComboBox<>(new String[] { "Active", "Graduated", "On Leave" });
-        formPanel.add(statusComboBox, gbc);
 
-        // Course/Grade fields
+        // Courses & Letter Grades
         gbc.gridy = 4;
         gbc.gridx = 0;
         gbc.gridwidth = 4;
-        formPanel.add(new JLabel("Courses & Grades (min 3):"), gbc);
+        formPanel.add(new JLabel("Courses & Letter Grades (min 3):"), gbc);
         gbc.gridwidth = 1;
 
         for (int i = 0; i < 6; i++) {
@@ -116,17 +112,15 @@ public class AddStudentMenu extends JPanel {
             formPanel.add(new JLabel("Grade:"), gbc);
 
             gbc.gridx = 3;
-            JTextField gradeField = new JTextField(8);
-            gradeFields.add(gradeField);
-            formPanel.add(gradeField, gbc);
+            JComboBox<String> gradeComboBox = new JComboBox<>(LETTER_GRADES);
+            gradeComboBoxes.add(gradeComboBox);
+            formPanel.add(gradeComboBox, gbc);
         }
 
-  
         JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         wrapperPanel.add(formPanel);
         add(wrapperPanel, BorderLayout.CENTER);
 
-    
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         saveButton = new JButton("Save");
         saveButton.addActionListener(new SaveButtonListener());
@@ -139,33 +133,28 @@ public class AddStudentMenu extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-private void loadCoursesFromJSON() {
-    courseList = new ArrayList<>();
-    try {
+    private void loadCoursesFromJSON() {
+        courseList = new ArrayList<>();
+        try {
+            JSONTokener tokener = new JSONTokener(new FileReader("courseCode.json"));
+            JSONObject jsonObject = new JSONObject(tokener);
 
-        JSONTokener tokener = new JSONTokener(new FileReader("courseCode.json"));
-        JSONObject jsonObject = new JSONObject(tokener);
-
-  
-        if (jsonObject.has("courseCodes")) {
-            JSONArray array = jsonObject.getJSONArray("courseCodes");
-
-       
-            for (int i = 0; i < array.length(); i++) {
-                String course = array.optString(i, null);
-                if (course != null) {
-                    courseList.add(course);
+            if (jsonObject.has("courseCodes")) {
+                JSONArray array = jsonObject.getJSONArray("courseCodes");
+                for (int i = 0; i < array.length(); i++) {
+                    String course = array.optString(i, null);
+                    if (course != null) {
+                        courseList.add(course);
+                    }
                 }
+            } else {
+                throw new JSONException("'courseCodes' field is missing in the JSON.");
             }
-        } else {
-            throw new JSONException("'courseCodes' field is missing in the JSON.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(mainMenu.getFrame(), "Failed to load course list: " + e.getMessage());
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(mainMenu.getFrame(), "Failed to load course list: " + e.getMessage());
     }
-}
-
 
     private void makeSearchable(JComboBox<String> comboBox) {
         JTextComponent editor = (JTextComponent) comboBox.getEditor().getEditorComponent();
@@ -193,26 +182,30 @@ private void loadCoursesFromJSON() {
                 String faculty = (String) facultyComboBox.getSelectedItem();
                 String program = programField.getText();
                 int enrollmentYear = Integer.parseInt(enrollmentYearField.getText());
-                String status = (String) statusComboBox.getSelectedItem();
-
-                Student newStudent = new Student(firstName, lastName, id, faculty, program, enrollmentYear, status);
-
+    
+                Student newStudent = new Student(firstName, lastName, id, faculty, program, enrollmentYear);
+    
                 int filledCount = 0;
                 for (int i = 0; i < 6; i++) {
                     String course = ((String) courseComboBoxes.get(i).getEditor().getItem()).trim();
-                    String gradeText = gradeFields.get(i).getText().trim();
-                    if (!course.isEmpty() && !gradeText.isEmpty()) {
-                        double grade = Double.parseDouble(gradeText);
+                    String grade = (String) gradeComboBoxes.get(i).getSelectedItem();
+                    if (!course.isEmpty() && grade != null && !grade.isEmpty()) {
                         newStudent.addGrade(new Grade(course, grade));
                         filledCount++;
                     }
                 }
-
+    
                 if (filledCount < 3) {
                     JOptionPane.showMessageDialog(mainMenu.getFrame(), "Please fill at least 3 course/grade pairs.");
                     return;
                 }
-
+    
+                calcGPA gpaCalculator = new calcGPA(newStudent);
+                double overallGPA = gpaCalculator.calcOverallGPA();
+                double roundedGPA = Math.round(overallGPA * 100.0) / 100.0;
+                newStudent.setGpa(roundedGPA);
+    
+             
                 mainMenu.addStudent(newStudent);
                 mainMenu.showPanel("MainMenu");
             } catch (Exception ex) {
@@ -221,4 +214,5 @@ private void loadCoursesFromJSON() {
             }
         }
     }
+    
 }

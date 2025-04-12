@@ -1,66 +1,43 @@
 public class calcGPA {
     private Student student;
-    double GPA;
-    String letterGrade;
 
     public calcGPA(Student student) {
         this.student = student;
     }
 
-    public double calccourseGPA(String courseName) {
-        // Gets the grade for a given course
-        Grade subGrade = student.getGradeByCourse(courseName);
-        // Returns 0.0 if the course wasn't foound
-        if (subGrade == null) {
-            return 0.0;
-        }
-        double grade = subGrade.getGrade();
-
-        // Assisgns a numeric grade to a letter grade
-        if (grade >= 85) {
-            letterGrade = "A";
-        } else if (grade >= 70) {
-            letterGrade = "B";
-        } else if (grade >= 55) {
-            letterGrade = "C";
-        } else if (grade >= 50) {
-            letterGrade = "D";
-        } else
-            letterGrade = "F";
-
-        // Returns a grade point for a letter grade
+    // GPA points mapping for a single Grade object
+    public double getGPAFromGrade(Grade grade) {
+        String letterGrade = grade.getGrade(); // or getLetterGrade() if that's your method
         switch (letterGrade) {
-            case "A":
-                GPA = 4.0;
-                break;
-            case "B":
-                GPA = 3.0;
-                break;
-            case "C":
-                GPA = 2.0;
-                break;
-            case "D":
-                GPA = 1.0;
-                break;
-            case "F":
-                GPA = 0.0;
-                break;
+            case "A+": return 4.3;
+            case "A":  return 4.0;
+            case "A-": return 3.7;
+            case "B+": return 3.3;
+            case "B":  return 3.0;
+            case "B-": return 2.7;
+            case "C+": return 2.3;
+            case "C":  return 2.0;
+            case "F1": return 1.0;
+            case "F2": return 0.5;
+            case "F3": return 0.0;
+            default:   return 0.0;
         }
-
-        return GPA;
     }
 
+    // GPA average over all courses
     public double calcOverallGPA() {
         double totalGPA = 0;
-        int numOfGrades = 0;
-        // Iterates through list of grades and gets the GPA for each
-        for (Grade currentGrade : student.getGrades()) {
-            totalGPA += calccourseGPA(currentGrade.getCourse());
-            numOfGrades++;
+        int numOfcourses = 0;
+
+        for (Grade currentGrade : student.getcourses()) {
+            totalGPA += getGPAFromGrade(currentGrade);
+            numOfcourses++;
         }
-        if (numOfGrades == 0) {
+
+        if (numOfcourses == 0) {
             return 0;
         }
-        return totalGPA / numOfGrades;
+
+        return totalGPA / numOfcourses;
     }
 }

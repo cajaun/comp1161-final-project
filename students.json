@@ -1,44 +1,38 @@
 [
   {
-    "firstName": "ca",
-    "lastName": "ca",
-    "id": "62",
-    "faculty": "Social Sciences",
-    "program": "ec",
-    "enrollmentYear": 22,
-    "status": "Active",
-    "gpa": 0.0,
-    "grades": [
-      {
-        "course": "Math",
-        "grade": 3.0
-      }
-    ],
-    "courses": []
-  },
-  {
     "firstName": "Cajaun",
     "lastName": "Campbell",
     "id": "620169526",
-    "faculty": "Social Sciences",
-    "program": "Econ",
+    "faculty": "Science and Technology",
+    "program": "Computer Science",
     "enrollmentYear": 2024,
     "status": "Active",
-    "gpa": 0.0,
-    "grades": [
+    "gpa": 3.88,
+    "courses": [
       {
-        "course": "COMP1161",
-        "grade": 3.0
+        "courseCode": "COMP1126",
+        "grade": "A"
       },
       {
-        "course": "COMP1220",
-        "grade": 4.0
+        "courseCode": "COMP1127",
+        "grade": "A"
       },
       {
-        "course": "ECON1000",
-        "grade": 5.0
+        "courseCode": "COMP1210",
+        "grade": "A"
+      },
+      {
+        "courseCode": "ECON1000",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "FOUN1101",
+        "grade": "B+"
+      },
+      {
+        "courseCode": "DoESP",
+        "grade": "A+"
       }
-    ],
-    "courses": []
+    ]
   }
 ]
