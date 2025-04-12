@@ -1,16 +1,16 @@
 import javax.swing.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.ArrayList;
 
 public class MainMenu {
     private JFrame frame;
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
     private List<Student> students;
+    private JButton activeButton;
 
     public MainMenu() {
-
         students = StudentUtils.loadStudents();
 
         try {
@@ -20,72 +20,105 @@ public class MainMenu {
         }
 
         frame = new JFrame("Student Grade System");
-        frame.setSize(400, 500);
+        frame.setSize(900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        JPanel headingPanel = new JPanel();
-        headingPanel.setBackground(new Color(30, 30, 30));
-        JLabel headingLabel = new JLabel("Student Grade System", SwingConstants.CENTER);
-        headingLabel.setForeground(Color.WHITE);
-        headingLabel.setFont(new Font("Roboto", Font.BOLD, 24));
-        headingPanel.add(headingLabel);
+        // Sidebar Panel
+        JPanel sidebar = new GlassPanel();
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setBackground(new Color(0, 0, 0, 0));
+        sidebar.setPreferredSize(new Dimension(220, frame.getHeight()));
 
-        frame.add(headingPanel, BorderLayout.NORTH);
+        // Sidebar Buttons
+        JButton addStudentButton = createSidebarButton("Add Student");
+        addStudentButton.addActionListener(e -> {
+            showPanel("AddStudent");
+            setActiveButton(addStudentButton);
+        });
+        sidebar.add(addStudentButton);
+        sidebar.add(Box.createVerticalStrut(10));
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(5, 1, 10, 10));
-        buttonPanel.setBackground(new Color(30, 30, 30));
+        JButton viewStudentsButton = createSidebarButton("View All Students");
+        viewStudentsButton.addActionListener(e -> {
+            showPanel("ViewStudents");
+            setActiveButton(viewStudentsButton);
+        });
+        sidebar.add(viewStudentsButton);
+        sidebar.add(Box.createVerticalStrut(10));
 
-        JButton addStudentBtn = new JButton("Add Student");
-        addStudentBtn.setBackground(new Color(200, 50, 50));
-        addStudentBtn.setForeground(Color.WHITE);
-        addStudentBtn.setPreferredSize(new Dimension(200, 40));
-        addStudentBtn.addActionListener(e -> showAddStudentMenu());
-        buttonPanel.add(addStudentBtn);
+        JButton editStudentsButton = createSidebarButton("Edit Students");
+        editStudentsButton.addActionListener(e -> {
+            showPanel("EditStudents");
+            setActiveButton(editStudentsButton);
+        });
+        sidebar.add(editStudentsButton);
+        sidebar.add(Box.createVerticalStrut(10));
 
-        JButton editStudentBtn = new JButton("Edit Student");
-        editStudentBtn.setBackground(new Color(200, 50, 50));
-        editStudentBtn.setForeground(Color.WHITE);
-        editStudentBtn.setPreferredSize(new Dimension(200, 40));
-        editStudentBtn.addActionListener(e -> showEditStudentMenu());
-        buttonPanel.add(editStudentBtn);
+        JButton logoutButton = createSidebarButton("Logout");
+        logoutButton.addActionListener(e -> logout());
+        sidebar.add(logoutButton);
 
-        JButton visualizeDataBtn = new JButton("Visualize Student Data");
-        visualizeDataBtn.setBackground(new Color(200, 50, 50));
-        visualizeDataBtn.setForeground(Color.WHITE);
-        visualizeDataBtn.setPreferredSize(new Dimension(200, 40));
-        visualizeDataBtn.addActionListener(e -> visualizeData());
-        buttonPanel.add(visualizeDataBtn);
+        frame.add(sidebar, BorderLayout.WEST);
 
-        JButton exitBtn = new JButton("Exit");
-        exitBtn.setBackground(new Color(200, 50, 50));
-        exitBtn.setForeground(Color.WHITE);
-        exitBtn.setPreferredSize(new Dimension(200, 40));
-        exitBtn.addActionListener(e -> System.exit(0));
-        buttonPanel.add(exitBtn);
+    
+        cardLayout = new CardLayout();
+        mainPanel = new GlassPanel();
+        mainPanel.setLayout(cardLayout);
+        mainPanel.setBackground(new Color(0, 0, 0, 0));
+        frame.add(mainPanel, BorderLayout.CENTER);
 
-        frame.add(buttonPanel, BorderLayout.CENTER);
+
+        addPanel("AddStudent", createAddStudentPanel());
+        addPanel("ViewStudents", new JLabel("View All Students Panel", SwingConstants.CENTER));
+        addPanel("EditStudents", new JLabel("Edit Students Panel", SwingConstants.CENTER));
 
         frame.setVisible(true);
+
+   
+        setActiveButton(addStudentButton);
     }
 
-    private void showAddStudentMenu() {
-        new AddStudentMenu(this, students);
-        frame.setVisible(false);
+    private JButton createSidebarButton(String text) {
+        JButton button = new JButton(text);
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setFont(new Font("Roboto", Font.PLAIN, 14));
+        button.setFocusPainted(false);
+        button.setForeground(Color.WHITE);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.setPreferredSize(new Dimension(180, 36));
+        button.setMaximumSize(new Dimension(180, 36));
+        button.setContentAreaFilled(false);
+        button.setOpaque(true);
+        button.setBackground(new Color(0, 0, 0, 0)); 
+        button.setBorder(BorderFactory.createLineBorder(new Color(0x40, 0x4A, 0x54), 1));
+        button.setUI(new RoundedButtonUI());
+
+        return button;
     }
 
-    private void showEditStudentMenu() {
-        new EditStudentMenu(this, students);
-        frame.setVisible(false);
+    private void setActiveButton(JButton button) {
+        if (activeButton != null) {
+            activeButton.setBackground(new Color(0, 0, 0, 0));
+            activeButton.setBorder(BorderFactory.createLineBorder(new Color(0x40, 0x4A, 0x54), 1));
+        }
+
+        activeButton = button;
+        activeButton.setBackground(new Color(0x2C, 0x6E, 0xF5, 80)); 
+        activeButton.setBorder(BorderFactory.createLineBorder(new Color(0x2C, 0x6E, 0xF5)));
     }
 
-    private void visualizeData() {
-        JOptionPane.showMessageDialog(frame, "Visualizing Student Data!");
+    private void addPanel(String name, JComponent panel) {
+        mainPanel.add(panel, name);
     }
 
-    public void showMainMenu() {
-        frame.setVisible(true);
+    public void showPanel(String name) {
+        cardLayout.show(mainPanel, name);
+    }
+
+    private JPanel createAddStudentPanel() {
+        return new AddStudentMenu(this, students);
     }
 
     public void addStudent(Student student) {
@@ -93,8 +126,13 @@ public class MainMenu {
         StudentUtils.saveStudents(students); 
     }
 
-    public List<Student> getStudents() {
-        return students;
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    private void logout() {
+        JOptionPane.showMessageDialog(frame, "You have been logged out.");
+        System.exit(0);
     }
 
     public static void main(String[] args) {

@@ -1,18 +1,25 @@
 import javax.swing.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
+import java.io.File;
+import java.io.FileReader;
 import java.util.List;
+import java.util.ArrayList;
+import javax.swing.text.JTextComponent;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
-public class AddStudentMenu {
-    private JFrame frame;
-    private JTextField firstNameField, lastNameField, idField, gradeField, programField,
-            enrollmentYearField;
-    private JComboBox<String> courseComboBox, statusComboBox, facultyComboBox;
-    private JList<String> coursesList;
-    private DefaultListModel<String> coursesListModel;
+public class AddStudentMenu extends JPanel {
+    private JTextField firstNameField, lastNameField, idField, programField, enrollmentYearField;
+    private JComboBox<String> statusComboBox, facultyComboBox;
+    private List<JComboBox<String>> courseComboBoxes = new ArrayList<>();
+    private List<JTextField> gradeFields = new ArrayList<>();
     private JButton saveButton, closeButton;
     private MainMenu mainMenu;
+    private List<String> courseList;
 
     public AddStudentMenu(MainMenu mainMenu, List<Student> students) {
         this.mainMenu = mainMenu;
@@ -23,119 +30,161 @@ public class AddStudentMenu {
             e.printStackTrace();
         }
 
-        frame = new JFrame("Add Student");
-        frame.setSize(400, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loadCoursesFromJSON();
 
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
 
+        // Student ID and Faculty
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(new JLabel("Student ID:"), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        idField = new JTextField();
+        idField = new JTextField(12);
         formPanel.add(idField, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridx = 2;
         formPanel.add(new JLabel("Faculty:"), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridx = 3;
         facultyComboBox = new JComboBox<>(new String[] {
-                "Social Sciences",
-                "Humanities and Education",
-                "Law",
-                "Engineering",
-                "Science and Technology",
-                "Sport",
-                "MedSci"
+                "Social Sciences", "Humanities and Education", "Law",
+                "Engineering", "Science and Technology", "Sport", "MedSci"
         });
         formPanel.add(facultyComboBox, gbc);
 
+        // First Name and Last Name
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         formPanel.add(new JLabel("First Name:"), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 2;
-        firstNameField = new JTextField();
+        firstNameField = new JTextField(12);
         formPanel.add(firstNameField, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridx = 2;
         formPanel.add(new JLabel("Last Name:"), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        lastNameField = new JTextField();
+        gbc.gridx = 3;
+        lastNameField = new JTextField(12);
         formPanel.add(lastNameField, gbc);
 
+        // Program and Enrollment Year
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 2;
         formPanel.add(new JLabel("Program:"), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 4;
-        programField = new JTextField();
+        programField = new JTextField(12);
         formPanel.add(programField, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridx = 2;
         formPanel.add(new JLabel("Enrollment Year:"), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        enrollmentYearField = new JTextField();
+        gbc.gridx = 3;
+        enrollmentYearField = new JTextField(12);
         formPanel.add(enrollmentYearField, gbc);
 
+        // Status
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 3;
         formPanel.add(new JLabel("Status:"), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 6;
         statusComboBox = new JComboBox<>(new String[] { "Active", "Graduated", "On Leave" });
         formPanel.add(statusComboBox, gbc);
 
+        // Course/Grade fields
+        gbc.gridy = 4;
         gbc.gridx = 0;
-        gbc.gridy = 8;
-        formPanel.add(new JLabel("Courses:"), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 8;
-        coursesListModel = new DefaultListModel<>();
-        coursesList = new JList<>(coursesListModel);
-        coursesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        formPanel.add(new JScrollPane(coursesList), gbc);
+        gbc.gridwidth = 4;
+        formPanel.add(new JLabel("Courses & Grades (min 3):"), gbc);
+        gbc.gridwidth = 1;
 
-        gbc.gridx = 0;
-        gbc.gridy = 10;
-        formPanel.add(new JLabel("Grade:"), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 10;
-        gradeField = new JTextField();
-        formPanel.add(gradeField, gbc);
+        for (int i = 0; i < 6; i++) {
+            gbc.gridy++;
+            gbc.gridx = 0;
+            formPanel.add(new JLabel("Course " + (i + 1) + ":"), gbc);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+            gbc.gridx = 1;
+            JComboBox<String> courseComboBox = new JComboBox<>(courseList.toArray(new String[0]));
+            courseComboBox.setEditable(true);
+            makeSearchable(courseComboBox);
+            courseComboBoxes.add(courseComboBox);
+            formPanel.add(courseComboBox, gbc);
 
+            gbc.gridx = 2;
+            formPanel.add(new JLabel("Grade:"), gbc);
+
+            gbc.gridx = 3;
+            JTextField gradeField = new JTextField(8);
+            gradeFields.add(gradeField);
+            formPanel.add(gradeField, gbc);
+        }
+
+  
+        JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrapperPanel.add(formPanel);
+        add(wrapperPanel, BorderLayout.CENTER);
+
+    
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         saveButton = new JButton("Save");
         saveButton.addActionListener(new SaveButtonListener());
         buttonPanel.add(saveButton);
 
-        closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> {
-            frame.setVisible(false);
-            mainMenu.showMainMenu();
-        });
+        closeButton = new JButton("Back");
+        closeButton.addActionListener(e -> mainMenu.showPanel("MainMenu"));
         buttonPanel.add(closeButton);
 
-        frame.add(formPanel, BorderLayout.CENTER);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
-
-        frame.setVisible(true);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private class SaveButtonListener implements java.awt.event.ActionListener {
+private void loadCoursesFromJSON() {
+    courseList = new ArrayList<>();
+    try {
+
+        JSONTokener tokener = new JSONTokener(new FileReader("courseCode.json"));
+        JSONObject jsonObject = new JSONObject(tokener);
+
+  
+        if (jsonObject.has("courseCodes")) {
+            JSONArray array = jsonObject.getJSONArray("courseCodes");
+
+       
+            for (int i = 0; i < array.length(); i++) {
+                String course = array.optString(i, null);
+                if (course != null) {
+                    courseList.add(course);
+                }
+            }
+        } else {
+            throw new JSONException("'courseCodes' field is missing in the JSON.");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(mainMenu.getFrame(), "Failed to load course list: " + e.getMessage());
+    }
+}
+
+
+    private void makeSearchable(JComboBox<String> comboBox) {
+        JTextComponent editor = (JTextComponent) comboBox.getEditor().getEditorComponent();
+        editor.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String input = editor.getText();
+                comboBox.removeAllItems();
+                for (String course : courseList) {
+                    if (course.toLowerCase().contains(input.toLowerCase())) {
+                        comboBox.addItem(course);
+                    }
+                }
+                editor.setText(input);
+                comboBox.showPopup();
+            }
+        });
+    }
+
+    private class SaveButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
                 String firstName = firstNameField.getText();
@@ -146,24 +195,29 @@ public class AddStudentMenu {
                 int enrollmentYear = Integer.parseInt(enrollmentYearField.getText());
                 String status = (String) statusComboBox.getSelectedItem();
 
-                String extractedCourse = (String) courseComboBox.getSelectedItem();
-                double grade = Double.parseDouble(gradeField.getText());
-                Grade newGrade = new Grade(extractedCourse, grade);
-
                 Student newStudent = new Student(firstName, lastName, id, faculty, program, enrollmentYear, status);
-                newStudent.addGrade(newGrade);
 
-                for (String course : coursesList.getSelectedValuesList()) {
-                    newStudent.addCourse(new Course(course, course, 3));
+                int filledCount = 0;
+                for (int i = 0; i < 6; i++) {
+                    String course = ((String) courseComboBoxes.get(i).getEditor().getItem()).trim();
+                    String gradeText = gradeFields.get(i).getText().trim();
+                    if (!course.isEmpty() && !gradeText.isEmpty()) {
+                        double grade = Double.parseDouble(gradeText);
+                        newStudent.addGrade(new Grade(course, grade));
+                        filledCount++;
+                    }
+                }
+
+                if (filledCount < 3) {
+                    JOptionPane.showMessageDialog(mainMenu.getFrame(), "Please fill at least 3 course/grade pairs.");
+                    return;
                 }
 
                 mainMenu.addStudent(newStudent);
-
-                JOptionPane.showMessageDialog(frame, "Student Saved!");
-                frame.setVisible(false);
-                mainMenu.showMainMenu();
+                mainMenu.showPanel("MainMenu");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame, "Error saving student: " + ex.getMessage());
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(mainMenu.getFrame(), "Error: " + ex.getMessage());
             }
         }
     }
