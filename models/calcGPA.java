@@ -1,3 +1,4 @@
+package models;
 public class calcGPA {
     private Student student;
 
@@ -5,9 +6,9 @@ public class calcGPA {
         this.student = student;
     }
 
-    // GPA points mapping for a single Grade object
+
     public double getGPAFromGrade(Grade grade) {
-        String letterGrade = grade.getGrade(); // or getLetterGrade() if that's your method
+        String letterGrade = grade.getGrade(); 
         switch (letterGrade) {
             case "A+": return 4.3;
             case "A":  return 4.0;
@@ -24,7 +25,7 @@ public class calcGPA {
         }
     }
 
-    // GPA average over all courses
+  
     public double calcOverallGPA() {
         double totalGPA = 0;
         int numOfcourses = 0;

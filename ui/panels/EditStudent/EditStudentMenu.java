@@ -1,4 +1,10 @@
+package ui.panels.EditStudent;
 import javax.swing.*;
+
+import models.Grade;
+import models.Student;
+import ui.MainMenu;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;

@@ -1,13 +1,35 @@
 [
   {
+    "firstName": "Henry",
+    "lastName": "Dang",
+    "id": "620169555",
+    "faculty": "Social Sciences",
+    "program": "LAw",
+    "enrollmentYear": 2023,
+    "gpa": 3.23,
+    "courses": [
+      {
+        "courseCode": "SBCO6160",
+        "grade": "B"
+      },
+      {
+        "courseCode": "MSBMVP",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "MGMT6021",
+        "grade": "B"
+      }
+    ]
+  },
+  {
     "firstName": "Cajaun",
     "lastName": "Campbell",
     "id": "620169526",
     "faculty": "Science and Technology",
-    "program": "Computer Science",
+    "program": "Comp Sci",
     "enrollmentYear": 2024,
-    "status": "Active",
-    "gpa": 3.88,
+    "gpa": 3.8,
     "courses": [
       {
         "courseCode": "COMP1126",
@@ -28,10 +50,6 @@
       {
         "courseCode": "FOUN1101",
         "grade": "B+"
-      },
-      {
-        "courseCode": "DoESP",
-        "grade": "A+"
       }
     ]
   }

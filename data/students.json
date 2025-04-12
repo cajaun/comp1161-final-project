@@ -1,0 +1,48 @@
+[
+  {
+    "firstName": "Cajaun",
+    "lastName": "Campbell",
+    "id": "620169526",
+    "faculty": "Science and Technology",
+    "program": "Comp Sci",
+    "enrollmentYear": 2024,
+    "gpa": 2.17,
+    "courses": [
+      {
+        "courseCode": "MGMT6021",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "SSFOSP",
+        "grade": "F2"
+      },
+      {
+        "courseCode": "MGMT3061",
+        "grade": "C+"
+      }
+    ]
+  },
+  {
+    "firstName": "Zanderr",
+    "lastName": "Hobbs",
+    "id": "620169527",
+    "faculty": "Science and Technology",
+    "program": "Comp Sci",
+    "enrollmentYear": 2024,
+    "gpa": 4.3,
+    "courses": [
+      {
+        "courseCode": "MGMT6021",
+        "grade": "A+"
+      },
+      {
+        "courseCode": "SSFOSP",
+        "grade": "A+"
+      },
+      {
+        "courseCode": "MGMT3061",
+        "grade": "A+"
+      }
+    ]
+  }
+]
