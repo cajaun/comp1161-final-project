@@ -1,15 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class EditStudentMenu {
     private JFrame frame;
     private JTextField idField, gradeField;
-    private JComboBox<String> subjectComboBox;
+    private JComboBox<String> courseComboBox;
     private JButton saveButton, closeButton;
-    private Student[] students;
+    private List<Student> students;
 
-    public EditStudentMenu(MainMenu mainMenu, Student[] students) {
+    public EditStudentMenu(MainMenu mainMenu, List<Student> students) {
         this.students = students;
 
         try {
@@ -27,9 +28,9 @@ public class EditStudentMenu {
         idField = new JTextField();
         frame.add(idField);
 
-        frame.add(new JLabel("Subject:"));
-        subjectComboBox = new JComboBox<>(new String[]{"Math", "Science", "History", "English"});
-        frame.add(subjectComboBox);
+        frame.add(new JLabel("course:"));
+        courseComboBox = new JComboBox<>(new String[] { "Math", "Science", "History", "English" });
+        frame.add(courseComboBox);
 
         frame.add(new JLabel("Grade:"));
         gradeField = new JTextField();
@@ -52,7 +53,7 @@ public class EditStudentMenu {
     private class SaveButtonListener implements java.awt.event.ActionListener {
         public void actionPerformed(ActionEvent e) {
             String id = idField.getText();
-            String subject = (String) subjectComboBox.getSelectedItem();
+            String course = (String) courseComboBox.getSelectedItem();
             String gradeText = gradeField.getText();
 
             if (id.isEmpty() || gradeText.isEmpty()) {
@@ -66,12 +67,12 @@ public class EditStudentMenu {
                 Student student = findStudentById(id);
 
                 if (student != null) {
-                    Grade gradeToUpdate = student.getGradeBySubject(subject);
+                    Grade gradeToUpdate = student.getGradeByCourse(course);
                     if (gradeToUpdate != null) {
                         gradeToUpdate.setGrade(grade);
                         JOptionPane.showMessageDialog(frame, "Grade Updated!");
                     } else {
-                        JOptionPane.showMessageDialog(frame, "Subject not found for the student.");
+                        JOptionPane.showMessageDialog(frame, "course not found for the student.");
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Student not found.");

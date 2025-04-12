@@ -1,25 +1,32 @@
 {
   "configurations": [
-      {
-          "type": "java",
-          "name": "StudentGradeSystemUI",
-          "request": "launch",
-          "mainClass": "StudentGradeSystemUI",
-          "projectName": "test_d557041"
-      },
-      {
-          "type": "java",
-          "name": "MainMenu",
-          "request": "launch",
-          "mainClass": "MainMenu",
-          "projectName": "test_d557041"
-      },
-      {
-          "type": "java",
-          "name": "FlatLafDemo",
-          "request": "launch",
-          "mainClass": "FlatLafDemo",
-          "projectName": "test_d557041"
-      }
-  ]
+    {
+        "type": "java",
+        "name": "MainMenu",
+        "request": "launch",
+        "mainClass": "MainMenu",
+        "projectName": "comp1161-final-project_2e3f8481"
+    },
+    {
+        "type": "java",
+        "name": "StudentGradeSystemUI",
+        "request": "launch",
+        "mainClass": "StudentGradeSystemUI",
+        "projectName": "test_d557041"
+    },
+    {
+        "type": "java",
+        "name": "MainMenu",
+        "request": "launch",
+        "mainClass": "MainMenu",
+        "projectName": "test_d557041"
+    },
+    {
+        "type": "java",
+        "name": "FlatLafDemo",
+        "request": "launch",
+        "mainClass": "FlatLafDemo",
+        "projectName": "test_d557041"
+    }
+]
 }

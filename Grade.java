@@ -1,14 +1,14 @@
 public class Grade {
-    private String subject;
+    private String course;
     private double grade;
 
-    public Grade(String subject, double grade) {
-        this.subject = subject;
+    public Grade(String course, double grade) {
+        this.course = course;
         this.grade = grade;
     }
     //test change
-    public String getSubject() {
-        return subject;
+    public String getCourse() {
+        return course;
     }
 
     public double getGrade() {
@@ -19,7 +19,7 @@ public class Grade {
         this.grade = grade;
     }
 
-    public void setSubject (String subject) {
-        this.subject = subject;
+    public void setCourse (String course) {
+        this.course = course;
     }
 }

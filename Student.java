@@ -1,27 +1,83 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Student {
     private String firstName;
     private String lastName;
     private String id;
-    private Grade[] grades;
+    private String faculty; 
+    private String program; 
+    private int enrollmentYear; 
+    private String status; 
+    private double gpa; 
+    private List<Grade> grades; 
+    private List<Course> courses; 
 
-    public Student(String firstName, String lastName, String id) {
+
+    public Student(String firstName, String lastName, String id, String faculty, String program, int enrollmentYear, String status) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
-        this.grades = new Grade[0];  // Initialize with an empty array
+        this.faculty = faculty;
+        this.program = program;
+        this.enrollmentYear = enrollmentYear;
+        this.status = status;
+        this.grades = new ArrayList<>();
+        this.courses = new ArrayList<>();
     }
+
 
     public String getId() {
         return id;
     }
 
-    public Grade[] getGrades() {
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public String getProgram() {
+        return program;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
+    }
+
+    public int getEnrollmentYear() {
+        return enrollmentYear;
+    }
+
+    public void setEnrollmentYear(int enrollmentYear) {
+        this.enrollmentYear = enrollmentYear;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public double getGpa() {
+        return gpa;
+    }
+
+    public void setGpa(double gpa) {
+        this.gpa = gpa;
+    }
+
+    public List<Grade> getGrades() {
         return grades;
     }
 
-    public Grade getGradeBySubject(String subject) {
+    public Grade getGradeByCourse(String course) {
         for (Grade grade : grades) {
-            if (grade.getSubject().equals(subject)) {
+            if (grade.getCourse().equals(course)) {
                 return grade;
             }
         }
@@ -29,27 +85,28 @@ public class Student {
     }
 
     public void addGrade(Grade grade) {
-        // Create a new array with one extra space
-        Grade[] newGrades = new Grade[grades.length + 1];
-        // Copy the existing grades into the new array
-        System.arraycopy(grades, 0, newGrades, 0, grades.length);
-        // Add the new grade
-        newGrades[grades.length] = grade;
-        // Update the grades array
-        grades = newGrades;
+        grades.add(grade);
     }
 
-    //Setters for Student
-    public void setFirstName (String firstName) {
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
+
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public void setLastName (String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public void setID (String id) {
+    public void setId(String id) {
         this.id = id;
     }
+
 
 }

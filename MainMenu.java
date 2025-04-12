@@ -2,12 +2,17 @@ import javax.swing.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.ArrayList;
 
 public class MainMenu {
     private JFrame frame;
-    private Student[] students = new Student[0]; // Array to store students
+    private List<Student> students;
 
     public MainMenu() {
+
+        students = StudentUtils.loadStudents();
+
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception e) {
@@ -84,10 +89,12 @@ public class MainMenu {
     }
 
     public void addStudent(Student student) {
-        Student[] newStudents = new Student[students.length + 1];
-        System.arraycopy(students, 0, newStudents, 0, students.length);
-        newStudents[students.length] = student;
-        students = newStudents;
+        students.add(student);
+        StudentUtils.saveStudents(students); 
+    }
+
+    public List<Student> getStudents() {
+        return students;
     }
 
     public static void main(String[] args) {

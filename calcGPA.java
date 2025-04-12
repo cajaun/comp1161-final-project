@@ -7,26 +7,29 @@ public class calcGPA {
         this.student = student;
     }
 
-    public double calcSubjectGPA(String subjectName) {
-        //Gets the grade for a given subject
-        Grade subGrade = student.getGradeBySubject(subjectName);
-        //Returns 0.0 if the subject wasn't foound
-        if (subGrade == null){return 0.0;}
+    public double calccourseGPA(String courseName) {
+        // Gets the grade for a given course
+        Grade subGrade = student.getGradeByCourse(courseName);
+        // Returns 0.0 if the course wasn't foound
+        if (subGrade == null) {
+            return 0.0;
+        }
         double grade = subGrade.getGrade();
 
-        //Assisgns a numeric grade to a letter grade
-        if (grade >= 85){
+        // Assisgns a numeric grade to a letter grade
+        if (grade >= 85) {
             letterGrade = "A";
-        } else if (grade >= 70){
+        } else if (grade >= 70) {
             letterGrade = "B";
-        } else if (grade >= 55){
+        } else if (grade >= 55) {
             letterGrade = "C";
-        } else if (grade >= 50){
+        } else if (grade >= 50) {
             letterGrade = "D";
-        } else letterGrade = "F";
+        } else
+            letterGrade = "F";
 
-        //Returns a grade point for a letter grade
-        switch (letterGrade){
+        // Returns a grade point for a letter grade
+        switch (letterGrade) {
             case "A":
                 GPA = 4.0;
                 break;
@@ -47,17 +50,17 @@ public class calcGPA {
         return GPA;
     }
 
-    public double calcOverallGPA(){
+    public double calcOverallGPA() {
         double totalGPA = 0;
         int numOfGrades = 0;
-        //Iterates through list of grades and gets the GPA for each
-        for(Grade currentGrade : student.getGrades()){
-            totalGPA += calcSubjectGPA(currentGrade.getSubject());
+        // Iterates through list of grades and gets the GPA for each
+        for (Grade currentGrade : student.getGrades()) {
+            totalGPA += calccourseGPA(currentGrade.getCourse());
             numOfGrades++;
         }
-        if (numOfGrades == 0){
+        if (numOfGrades == 0) {
             return 0;
         }
-        return totalGPA/numOfGrades;
+        return totalGPA / numOfGrades;
     }
 }

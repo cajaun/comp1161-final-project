@@ -1,0 +1,19 @@
+[
+  {
+    "firstName": "test",
+    "lastName": "test",
+    "id": "123",
+    "faculty": "test",
+    "program": "test",
+    "enrollmentYear": 2024,
+    "status": "Active",
+    "gpa": 0.0,
+    "grades": [
+      {
+        "course": "Math",
+        "grade": 3.0
+      }
+    ],
+    "courses": []
+  }
+]
