@@ -1,4 +1,5 @@
 package ui.components;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
@@ -23,7 +24,9 @@ public class RoundedButtonUI extends BasicButtonUI {
         } else {
             g2.setColor(b.getBackground());
         }
-        g2.fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 20, 20); 
+
+        int arc = 8;
+        g2.fillRoundRect(0, 0, b.getWidth(), b.getHeight(), arc, arc);
 
         // Text
         g2.setColor(b.getForeground());

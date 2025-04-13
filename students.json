@@ -1,55 +1,159 @@
 [
   {
-    "firstName": "Henry",
-    "lastName": "Dang",
-    "id": "620169555",
-    "faculty": "Social Sciences",
-    "program": "LAw",
-    "enrollmentYear": 2023,
-    "gpa": 3.23,
+    "firstName": "Mia",
+    "lastName": "Harris",
+    "id": "620169533",
+    "faculty": "Engineering",
+    "program": "Mechanical Engineering",
+    "enrollmentYear": 2022,
+    "gpa": 3.5,
     "courses": [
       {
-        "courseCode": "SBCO6160",
-        "grade": "B"
+        "courseCode": "ENGR1010",
+        "grade": "A"
       },
       {
-        "courseCode": "MSBMVP",
+        "courseCode": "MATH2022",
+        "grade": "B+"
+      },
+      {
+        "courseCode": "PHYS2001",
         "grade": "A-"
       },
       {
-        "courseCode": "MGMT6021",
+        "courseCode": "ENGR2050",
         "grade": "B"
       }
     ]
   },
   {
-    "firstName": "Cajaun",
-    "lastName": "Campbell",
-    "id": "620169526",
+    "firstName": "Liam",
+    "lastName": "Johnson",
+    "id": "620169567",
+    "faculty": "Business",
+    "program": "Marketing",
+    "enrollmentYear": 2021,
+    "gpa": 3.9,
+    "courses": [
+      {
+        "courseCode": "MKTG1010",
+        "grade": "A"
+      },
+      {
+        "courseCode": "ECON2021",
+        "grade": "A"
+      },
+      {
+        "courseCode": "BUSMGT3000",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "FINANCE4001",
+        "grade": "B+"
+      }
+    ]
+  },
+  {
+    "firstName": "Sophia",
+    "lastName": "Lee",
+    "id": "620169512",
+    "faculty": "Arts",
+    "program": "Psychology",
+    "enrollmentYear": 2023,
+    "gpa": 3.7,
+    "courses": [
+      {
+        "courseCode": "PSY1010",
+        "grade": "A"
+      },
+      {
+        "courseCode": "PSY2010",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "PSY3020",
+        "grade": "B+"
+      }
+    ]
+  },
+  {
+    "firstName": "Ethan",
+    "lastName": "Wright",
+    "id": "620169540",
     "faculty": "Science and Technology",
-    "program": "Comp Sci",
+    "program": "Electrical Engineering",
+    "enrollmentYear": 2024,
+    "gpa": 3.6,
+    "courses": [
+      {
+        "courseCode": "ELEC1001",
+        "grade": "A"
+      },
+      {
+        "courseCode": "CSCI1100",
+        "grade": "B"
+      },
+      {
+        "courseCode": "PHYS1011",
+        "grade": "A"
+      },
+      {
+        "courseCode": "MATH2002",
+        "grade": "B+"
+      }
+    ]
+  },
+  {
+    "firstName": "Ava",
+    "lastName": "Morris",
+    "id": "620169549",
+    "faculty": "Social Sciences",
+    "program": "Sociology",
+    "enrollmentYear": 2022,
+    "gpa": 3.2,
+    "courses": [
+      {
+        "courseCode": "SOC1010",
+        "grade": "B"
+      },
+      {
+        "courseCode": "SOC2020",
+        "grade": "B+"
+      },
+      {
+        "courseCode": "SOC3030",
+        "grade": "C"
+      },
+      {
+        "courseCode": "PSY1001",
+        "grade": "B"
+      }
+    ]
+  },
+  {
+    "firstName": "Isabella",
+    "lastName": "Taylor",
+    "id": "620169566",
+    "faculty": "Law",
+    "program": "Criminal Law",
     "enrollmentYear": 2024,
     "gpa": 3.8,
     "courses": [
       {
-        "courseCode": "COMP1126",
+        "courseCode": "LAW1001",
         "grade": "A"
       },
       {
-        "courseCode": "COMP1127",
-        "grade": "A"
-      },
-      {
-        "courseCode": "COMP1210",
-        "grade": "A"
-      },
-      {
-        "courseCode": "ECON1000",
+        "courseCode": "LAW2002",
         "grade": "A-"
       },
       {
-        "courseCode": "FOUN1101",
+        "courseCode": "LAW3003",
         "grade": "B+"
+      },
+      {
+        "courseCode": "LAW4004",
+        "grade": "A"
       }
     ]
   }

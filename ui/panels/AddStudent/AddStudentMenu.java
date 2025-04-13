@@ -27,6 +27,7 @@ public class AddStudentMenu extends JPanel {
         courseList = CourseLoader.loadCourses("data/courseCode.json");
         formBuilder = new StudentFormBuilder();
 
+        setBackground(Color.decode("#1A1A1A"));
         setLayout(new BorderLayout());
 
         JPanel formPanel = formBuilder.buildForm(courseList);

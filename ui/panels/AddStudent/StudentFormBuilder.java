@@ -15,64 +15,89 @@ public class StudentFormBuilder {
     private List<JComboBox<String>> gradeComboBoxes = new ArrayList<>();
 
     public JPanel buildForm(List<String> courseList) {
-        JPanel formPanel = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setOpaque(false);
+
+
+        mainPanel.add(createSectionLabel("Student Information"));
+        mainPanel.add(wrapWithRoundedBorder(createInfoPanel()));
+        mainPanel.add(Box.createVerticalStrut(20));
+
+    
+        mainPanel.add(createSectionLabel("Courses & Grades"));
+        mainPanel.add(wrapWithRoundedBorder(createCoursePanel(courseList)));
+
+        return mainPanel;
+    }
+
+    private JLabel createSectionLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(label.getFont().deriveFont(Font.BOLD, 14f));
+        label.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
+        return label;
+    }
+
+    private JPanel wrapWithRoundedBorder(JPanel inner) {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(180, 180, 180), 1, true),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        wrapper.setOpaque(false);
+        wrapper.add(inner, BorderLayout.CENTER);
+        return wrapper;
+    }
+
+    private JPanel createInfoPanel() {
+        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        panel.setOpaque(false);
+
+        panel.add(new JLabel("Student ID:"));
+        idField = new JTextField(15);
+        panel.add(idField);
+
+        panel.add(new JLabel("Faculty:"));
+        facultyComboBox = new JComboBox<>(Constants.FACULTIES);
+        panel.add(facultyComboBox);
+
+        panel.add(new JLabel("First Name:"));
+        firstNameField = new JTextField(15);
+        panel.add(firstNameField);
+
+        panel.add(new JLabel("Last Name:"));
+        lastNameField = new JTextField(15);
+        panel.add(lastNameField);
+
+        panel.add(new JLabel("Program:"));
+        programField = new JTextField(15);
+        panel.add(programField);
+
+        panel.add(new JLabel("Enrollment Year:"));
+        enrollmentYearField = new JTextField(15);
+        panel.add(enrollmentYearField);
+
+        return panel;
+    }
+
+    private JPanel createCoursePanel(List<String> courseList) {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-    
         gbc.gridx = 0;
         gbc.gridy = 0;
-        formPanel.add(new JLabel("Student ID:"), gbc);
-        gbc.gridx = 1;
-        idField = new JTextField(12);
-        formPanel.add(idField, gbc);
-
-        gbc.gridx = 2;
-        formPanel.add(new JLabel("Faculty:"), gbc);
-        gbc.gridx = 3;
-        facultyComboBox = new JComboBox<>(Constants.FACULTIES);
-        formPanel.add(facultyComboBox, gbc);
-
-      
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        formPanel.add(new JLabel("First Name:"), gbc);
-        gbc.gridx = 1;
-        firstNameField = new JTextField(12);
-        formPanel.add(firstNameField, gbc);
-
-        gbc.gridx = 2;
-        formPanel.add(new JLabel("Last Name:"), gbc);
-        gbc.gridx = 3;
-        lastNameField = new JTextField(12);
-        formPanel.add(lastNameField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        formPanel.add(new JLabel("Program:"), gbc);
-        gbc.gridx = 1;
-        programField = new JTextField(12);
-        formPanel.add(programField, gbc);
-
-        gbc.gridx = 2;
-        formPanel.add(new JLabel("Enrollment Year:"), gbc);
-        gbc.gridx = 3;
-        enrollmentYearField = new JTextField(12);
-        formPanel.add(enrollmentYearField, gbc);
-
-        
-        gbc.gridy = 4;
-        gbc.gridx = 0;
         gbc.gridwidth = 4;
-        formPanel.add(new JLabel("Courses & Letter Grades (min 3):"), gbc);
+        panel.add(new JLabel("Courses & Letter Grades (min 3):"), gbc);
         gbc.gridwidth = 1;
 
         for (int i = 0; i < 6; i++) {
             gbc.gridy++;
             gbc.gridx = 0;
-            formPanel.add(new JLabel("Course " + (i + 1) + ":"), gbc);
+            panel.add(new JLabel("Course " + (i + 1) + ":"), gbc);
 
             gbc.gridx = 1;
             JComboBox<String> courseComboBox = new JComboBox<>(courseList.toArray(new String[0]));
@@ -80,10 +105,10 @@ public class StudentFormBuilder {
             courseComboBox.setSelectedItem(null);
             ComboBoxUtils.makeSearchable(courseComboBox, courseList);
             courseComboBoxes.add(courseComboBox);
-            formPanel.add(courseComboBox, gbc);
+            panel.add(courseComboBox, gbc);
 
             gbc.gridx = 2;
-            formPanel.add(new JLabel("Grade:"), gbc);
+            panel.add(new JLabel("Grade:"), gbc);
 
             gbc.gridx = 3;
             JComboBox<String> gradeComboBox = new JComboBox<>();
@@ -93,12 +118,11 @@ public class StudentFormBuilder {
             }
             gradeComboBox.setSelectedItem("");
             gradeComboBoxes.add(gradeComboBox);
-            formPanel.add(gradeComboBox, gbc);
+            panel.add(gradeComboBox, gbc);
         }
 
-        return formPanel;
+        return panel;
     }
-
 
     public JTextField getFirstNameField() { return firstNameField; }
     public JTextField getLastNameField() { return lastNameField; }
