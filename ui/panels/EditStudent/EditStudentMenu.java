@@ -1,100 +1,145 @@
 package ui.panels.EditStudent;
-import javax.swing.*;
 
 import models.Grade;
 import models.Student;
+import models.calcGPA;
 import ui.MainMenu;
+import util.StudentUtils;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 
-public class EditStudentMenu {
-    private JFrame frame;
-    private JTextField idField, gradeField;
-    private JComboBox<String> courseComboBox;
-    private JButton saveButton, closeButton;
-    private List<Student> students;
+public class EditStudentMenu extends JPanel {
+    private final MainMenu mainMenu;
+    private Student student;
+    private List<JComboBox<String>> newGradeFields = new ArrayList<>();
+    private List<Grade> grades;
 
-    public EditStudentMenu(MainMenu mainMenu, List<Student> students) {
-        this.students = students;
-
-        try {
-            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        frame = new JFrame("Edit Student");
-        frame.setSize(400, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridLayout(6, 2));
-
-        frame.add(new JLabel("Student ID:"));
-        idField = new JTextField();
-        frame.add(idField);
-
-        frame.add(new JLabel("course:"));
-        courseComboBox = new JComboBox<>(new String[] { "Math", "Science", "History", "English" });
-        frame.add(courseComboBox);
-
-        frame.add(new JLabel("Grade:"));
-        gradeField = new JTextField();
-        frame.add(gradeField);
-
-        saveButton = new JButton("Save");
-        saveButton.addActionListener(new SaveButtonListener());
-        frame.add(saveButton);
-
-        closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> {
-            frame.setVisible(false);
-            mainMenu.showMainMenu();
-        });
-        frame.add(closeButton);
-
-        frame.setVisible(true);
+    public EditStudentMenu(MainMenu mainMenu) {
+        this.mainMenu = mainMenu;
+        setLayout(new BorderLayout());
+        setBackground(Color.decode("#1A1A1A"));
     }
 
-    private class SaveButtonListener implements java.awt.event.ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String id = idField.getText();
-            String course = (String) courseComboBox.getSelectedItem();
-            String gradeText = gradeField.getText();
+    public void refresh() {
+        promptForStudentId(); 
+    }
 
-            if (id.isEmpty() || gradeText.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Please fill all fields.");
-                return;
-            }
+    private void promptForStudentId() {
+        String studentId = JOptionPane.showInputDialog(mainMenu.getFrame(), "Enter Student ID to Edit:");
+        if (studentId == null || studentId.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(mainMenu.getFrame(), "No Student ID entered.");
+            mainMenu.showPanel("MainMenu");
+            return;
+        }
 
-            try {
-                double grade = Double.parseDouble(gradeText);
+        student = findStudentById(studentId.trim());
 
-                Student student = findStudentById(id);
-
-                if (student != null) {
-                    Grade gradeToUpdate = student.getGradeByCourse(course);
-                    if (gradeToUpdate != null) {
-                        gradeToUpdate.setGrade(grade);
-                        JOptionPane.showMessageDialog(frame, "Grade Updated!");
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "course not found for the student.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Student not found.");
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Please enter a valid grade.");
-            }
+        if (student != null) {
+            grades = student.getcourses();
+            loadEditPanel();
+        } else {
+            JOptionPane.showMessageDialog(mainMenu.getFrame(), "Student not found.");
+            mainMenu.showPanel("MainMenu");
         }
     }
 
-    private Student findStudentById(String id) {
-        for (Student student : students) {
-            if (student.getId().equals(id)) {
-                return student;
+    private Student findStudentById(String studentId) {
+        for (Student s : mainMenu.getStudents()) {
+            if (s.getId().equals(studentId)) {
+                return s;
             }
         }
         return null;
+    }
+
+    private void loadEditPanel() {
+        removeAll();
+        setLayout(new BorderLayout());
+        newGradeFields.clear();
+    
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setOpaque(false);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+    
+        JLabel idLabel = new JLabel("ID#: " + student.getId());
+        idLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        idLabel.setForeground(Color.WHITE);
+        idLabel.setAlignmentX(LEFT_ALIGNMENT);
+        idLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+        contentPanel.add(idLabel);
+    
+        contentPanel.add(createGradesPanel());
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(createButtonPanel());
+    
+        add(contentPanel, BorderLayout.NORTH);
+        revalidate();
+        repaint();
+    }
+    private JPanel createGradesPanel() {
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    
+        for (Grade grade : grades) {
+            JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+            row.setOpaque(false);
+    
+            JLabel courseLabel = new JLabel(grade.getCourse());
+            courseLabel.setPreferredSize(new Dimension(150, 25));
+            courseLabel.setForeground(Color.WHITE);
+            row.add(courseLabel);
+    
+            JComboBox<String> gradeDropdown = new JComboBox<>(new String[]{
+                "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "F1", "F2", "F3"
+            });
+            gradeDropdown.setSelectedItem(grade.getGrade());
+            newGradeFields.add(gradeDropdown);
+            row.add(gradeDropdown);
+    
+            panel.add(row);
+        }
+    
+        return panel;
+    }
+    private JPanel createButtonPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panel.setOpaque(false);
+
+        JButton saveButton = new JButton("Save Changes");
+        saveButton.addActionListener(e -> saveChanges());
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> mainMenu.showPanel("ViewStudents"));
+
+        panel.add(saveButton);
+        panel.add(backButton);
+
+        return panel;
+    }
+
+    private void saveChanges() {
+        if (student == null) return;
+
+        for (int i = 0; i < grades.size(); i++) {
+            String selectedGrade = (String) newGradeFields.get(i).getSelectedItem();
+            if (selectedGrade != null) {
+                grades.get(i).setGrade(selectedGrade);
+            }
+        }
+
+        calcGPA gpaCalc = new calcGPA(student);
+        double newGpa = Math.round(gpaCalc.calcOverallGPA() * 100.0) / 100.0;
+        student.setGpa(newGpa);
+
+        StudentUtils.saveStudents(mainMenu.getStudents());
+
+        JOptionPane.showMessageDialog(mainMenu.getFrame(), "Grades and GPA updated.");
+        mainMenu.reloadViewStudentsPanel();
+        mainMenu.showPanel("ViewStudents");
     }
 }

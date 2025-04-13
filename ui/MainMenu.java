@@ -7,6 +7,7 @@ import models.Student;
 import ui.components.RoundedButtonUI;
 import ui.components.StyledPanel;
 import ui.panels.AddStudent.AddStudentMenu;
+import ui.panels.EditStudent.EditStudentMenu;
 import ui.panels.ViewStudents.ViewStudentsMenu;
 import util.StudentUtils;
 
@@ -22,6 +23,8 @@ public class MainMenu {
     private List<Student> students;
     private Set<String> studentIDs = new HashSet<>();
     private JButton activeButton;
+
+    private EditStudentMenu editStudentMenu; // Store instance to call refresh
 
     public MainMenu() {
         students = StudentUtils.loadStudents();
@@ -40,10 +43,9 @@ public class MainMenu {
         initializeMainPanel();
 
         frame.setVisible(true);
-        setActiveButton((JButton)((JPanel) frame.getContentPane().getComponent(0)).getComponent(0)); // default: first button
+        setActiveButton((JButton)((JPanel) frame.getContentPane().getComponent(0)).getComponent(0));
     }
 
-    // Sidebar Creation with Improved Design
     private JPanel createSidebar() {
         JPanel sidebar = StyledPanel.createSidebarPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
@@ -51,7 +53,6 @@ public class MainMenu {
         sidebar.setPreferredSize(new Dimension(200, frame.getHeight()));
         sidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create Sidebar Buttons with icons (if any)
         JButton addStudentButton = createSidebarButton("Add Student", "add_icon.png");
         addStudentButton.addActionListener(e -> {
             showPanel("AddStudent");
@@ -67,14 +68,18 @@ public class MainMenu {
 
         JButton editStudentsButton = createSidebarButton("Edit Students", "edit_icon.png");
         editStudentsButton.addActionListener(e -> {
-            showPanel("EditStudents");
-            setActiveButton(editStudentsButton);
+            if (students.size() > 0) {
+                editStudentMenu.refresh(); // Prompt when navigating to Edit panel
+                showPanel("EditStudents");
+                setActiveButton(editStudentsButton);
+            } else {
+                JOptionPane.showMessageDialog(frame, "No students available to edit.");
+            }
         });
 
         JButton logoutButton = createSidebarButton("Logout", "logout_icon.png");
         logoutButton.addActionListener(e -> logout());
 
-        // Add the buttons to the sidebar with proper spacing
         sidebar.add(addStudentButton);
         sidebar.add(Box.createVerticalStrut(3));
         sidebar.add(viewStudentsButton);
@@ -95,41 +100,42 @@ public class MainMenu {
 
         addPanel("AddStudent", createAddStudentPanel());
         addPanel("ViewStudents", new ViewStudentsMenu(students));
-        addPanel("EditStudents", new JLabel("Edit Students Panel", SwingConstants.CENTER));
+
+        // Initialize and store EditStudentMenu panel for refreshing later
+        editStudentMenu = new EditStudentMenu(this);
+        addPanel("EditStudents", editStudentMenu);
     }
 
     private JPanel createAddStudentPanel() {
         return new AddStudentMenu(this, students);
     }
 
-    private void reloadViewStudentsPanel() {
+    public void reloadViewStudentsPanel() {
         students = StudentUtils.loadStudents();
         addPanel("ViewStudents", new ViewStudentsMenu(students));
+    }
+
+    public List<Student> getStudents() {
+        return students;
     }
 
     private void addPanel(String name, JComponent panel) {
         mainPanel.add(panel, name);
     }
 
-
     private JButton createSidebarButton(String text, String iconPath) {
         JButton button = new JButton(text);
         button.setHorizontalAlignment(SwingConstants.LEFT);
-        button.setFont(new Font("Roboto", Font.PLAIN, 12)); 
+        button.setFont(new Font("Roboto", Font.PLAIN, 12));
         button.setFocusPainted(false);
         button.setForeground(Color.WHITE);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-
-
         button.setPreferredSize(new Dimension(200, 27));
         button.setMaximumSize(new Dimension(200, 27));
         button.setContentAreaFilled(false);
         button.setOpaque(true);
         button.setBackground(new Color(0, 0, 0, 0));
         button.setUI(new RoundedButtonUI());
-
-
 
         return button;
     }
@@ -139,9 +145,8 @@ public class MainMenu {
             activeButton.setBackground(new Color(0, 0, 0, 0));
         }
         activeButton = button;
-        activeButton.setBackground(Color.decode("#7F7F7F")); 
+        activeButton.setBackground(Color.decode("#7F7F7F"));
     }
-    
 
     public void addStudent(Student student) {
         if (studentIDs.contains(student.getId())) {
