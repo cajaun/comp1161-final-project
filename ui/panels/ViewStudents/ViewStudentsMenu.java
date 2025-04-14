@@ -6,26 +6,34 @@ import ui.components.StyledPanel;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XChartPanel;
-import org.knowm.xchart.style.Styler;
+
 
 public class ViewStudentsMenu extends StyledPanel {
+
+    private JPanel centerPanel;
+    private CardLayout cardLayout;
+    private JPanel buttonPanel;
+    private JButton visualizeButton, backButton;
 
     public ViewStudentsMenu(List<Student> students) {
         super();
         setBackgroundColor(StyledPanel.WELCOME_BACKGROUND);
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"ID", "First Name", "Last Name", "Faculty", "Program", "Enrollment Year", "GPA"};
+  
+        String[] columnNames = { "ID", "First Name", "Last Name", "Faculty", "Program", "Enrollment Year", "GPA" };
         Object[][] data = new Object[students.size()][7];
 
+   
         for (int i = 0; i < students.size(); i++) {
             Student s = students.get(i);
             data[i][0] = s.getId();
@@ -37,6 +45,7 @@ public class ViewStudentsMenu extends StyledPanel {
             data[i][6] = s.getGpa();
         }
 
+      
         JTable studentTable = new JTable(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -44,6 +53,9 @@ public class ViewStudentsMenu extends StyledPanel {
             }
         };
         
+       
+        TableRowSorter sorter = new TableRowSorter<>(studentTable.getModel());
+        studentTable.setRowSorter(sorter);
         studentTable.setBackground(StyledPanel.WELCOME_BACKGROUND);
         studentTable.setForeground(Color.WHITE);
         studentTable.setGridColor(new Color(80, 80, 80));
@@ -57,18 +69,39 @@ public class ViewStudentsMenu extends StyledPanel {
         header.setForeground(Color.WHITE);
         header.setReorderingAllowed(false);
 
+     
         JScrollPane scrollPane = new JScrollPane(studentTable);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        add(scrollPane, BorderLayout.CENTER);
 
-        // Panel for Visualize Button
-        JPanel visualizePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        visualizePanel.setOpaque(false);
-        JButton visualizeButton = new JButton("Visualize Grades");
+      
+        cardLayout = new CardLayout();
+        centerPanel = new JPanel(cardLayout);
+        centerPanel.setOpaque(false);
+        centerPanel.add(scrollPane, "TABLE");
+
+        add(centerPanel, BorderLayout.CENTER);
+
+ 
+        buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
+
+   
+        visualizeButton = new JButton("Visualize Grades");
         visualizeButton.addActionListener(e -> showGradeChart(students));
-        visualizePanel.add(visualizeButton);
-        add(visualizePanel, BorderLayout.SOUTH);
+        buttonPanel.add(visualizeButton);
+
+      
+        backButton = new JButton("Back to Table");
+        backButton.setVisible(false);
+        backButton.addActionListener(e -> {
+            cardLayout.show(centerPanel, "TABLE");
+            backButton.setVisible(false);
+            visualizeButton.setVisible(true);
+        });
+        buttonPanel.add(backButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private void showGradeChart(List<Student> students) {
@@ -91,12 +124,11 @@ public class ViewStudentsMenu extends StyledPanel {
             return;
         }
 
-        // Grade scale in order (A+ to F3) with numeric equivalents
         String[] gradeScale = {
-            "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "F1", "F2", "F3"
+                "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "F1", "F2", "F3"
         };
         double[] gradeValues = {
-            4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 0.0
+                4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 0.0
         };
 
         List<String> courses = new ArrayList<>();
@@ -104,11 +136,9 @@ public class ViewStudentsMenu extends StyledPanel {
 
         for (Grade g : found.getcourses()) {
             courses.add(g.getCourse());
-
             double val = 0.0;
-            String gradeStr = g.getGrade();
             for (int i = 0; i < gradeScale.length; i++) {
-                if (gradeScale[i].equals(gradeStr)) {
+                if (gradeScale[i].equals(g.getGrade())) {
                     val = gradeValues[i];
                     break;
                 }
@@ -116,7 +146,7 @@ public class ViewStudentsMenu extends StyledPanel {
             values.add(val);
         }
 
-        // Create chart
+      
         CategoryChart chart = new CategoryChartBuilder()
                 .width(800)
                 .height(400)
@@ -125,7 +155,6 @@ public class ViewStudentsMenu extends StyledPanel {
                 .yAxisTitle("GPA")
                 .build();
 
-        // Apply custom theme and styling
         chart.getStyler().setChartBackgroundColor(Color.DARK_GRAY);
         chart.getStyler().setPlotBackgroundColor(Color.DARK_GRAY);
         chart.getStyler().setChartFontColor(Color.WHITE);
@@ -134,19 +163,18 @@ public class ViewStudentsMenu extends StyledPanel {
         chart.getStyler().setLegendVisible(false);
         chart.getStyler().setXAxisLabelRotation(45);
         chart.getStyler().setAvailableSpaceFill(0.8);
-
-        // Set axis title font 
         chart.getStyler().setAxisTitleFont(new Font("Arial", Font.PLAIN, 14));
 
         chart.addSeries("GPA", courses, values);
 
+       
         JPanel chartPanel = new XChartPanel<>(chart);
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Grade Visualization");
-        dialog.setModal(true);
-        dialog.getContentPane().add(chartPanel);
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
+        chartPanel.setOpaque(false);
+        centerPanel.add(chartPanel, "CHART");
+        cardLayout.show(centerPanel, "CHART");
+
+    
+        visualizeButton.setVisible(false);
+        backButton.setVisible(true);
     }
 }

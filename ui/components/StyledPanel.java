@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class StyledPanel extends JPanel {
-    // Define default and themed background colors
+  
     public static final Color SIDEBAR_BACKGROUND = Color.decode("#636B75");
     public static final Color MAIN_BACKGROUND = Color.decode("#2B2B2B");
     public static final Color WELCOME_BACKGROUND = Color.decode("#505D6A");

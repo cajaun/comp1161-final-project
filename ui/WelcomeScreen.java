@@ -1,17 +1,15 @@
 package ui;
 
 import javax.swing.*;
-import com.formdev.flatlaf.FlatDarkLaf;
-
-import models.Student;
 import ui.components.RoundedButtonUI;
 import ui.components.StyledPanel;
-import util.StudentUtils;
+
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class WelcomeScreen {
 
@@ -21,8 +19,9 @@ public class WelcomeScreen {
     Font openRundeFont = null;
 
     try {
-  
-      openRundeFont = Font.createFont(Font.TRUETYPE_FONT, new File("comp1161-final-project\\assets\\OpenRunde-Semibold.otf"))
+      Path fontPath = Paths.get("assets", "OpenRunde-Semibold.otf");
+      openRundeFont = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath.toString()))
+
           .deriveFont(20f);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();
@@ -41,7 +40,8 @@ public class WelcomeScreen {
     JPanel contentPanel = StyledPanel.createWelcomePanel();
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-    ImageIcon logoIcon = new ImageIcon("comp1161-final-project\\assets\\logo.png");
+    Path logoPath = Paths.get("assets", "logo.png");
+    ImageIcon logoIcon = new ImageIcon(logoPath.toString());
     Image logoImage = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
     JLabel logoLabel = new JLabel(new ImageIcon(logoImage));
     logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
