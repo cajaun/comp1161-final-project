@@ -3,6 +3,7 @@ package ui.panels.ViewStudents;
 import models.Grade;
 import models.Student;
 import ui.components.StyledPanel;
+import util.Fonts;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -16,7 +17,6 @@ import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
-
 public class ViewStudentsMenu extends StyledPanel {
 
     private JPanel centerPanel;
@@ -26,14 +26,21 @@ public class ViewStudentsMenu extends StyledPanel {
 
     public ViewStudentsMenu(List<Student> students) {
         super();
-        setBackgroundColor(StyledPanel.WELCOME_BACKGROUND);
+        setBackgroundColor(StyledPanel.MAIN_BACKGROUND);
         setLayout(new BorderLayout());
 
   
+    JLabel titleLabel = new JLabel("Student Information", SwingConstants.LEFT);
+    titleLabel.setFont(Fonts.OPEN_RUNDE.deriveFont(16f)); 
+    titleLabel.setForeground(Color.WHITE);
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
+
+
+    add(titleLabel, BorderLayout.NORTH);
+
         String[] columnNames = { "ID", "First Name", "Last Name", "Faculty", "Program", "Enrollment Year", "GPA" };
         Object[][] data = new Object[students.size()][7];
 
-   
         for (int i = 0; i < students.size(); i++) {
             Student s = students.get(i);
             data[i][0] = s.getId();
@@ -45,18 +52,16 @@ public class ViewStudentsMenu extends StyledPanel {
             data[i][6] = s.getGpa();
         }
 
-      
         JTable studentTable = new JTable(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        
-       
+
         TableRowSorter sorter = new TableRowSorter<>(studentTable.getModel());
         studentTable.setRowSorter(sorter);
-        studentTable.setBackground(StyledPanel.WELCOME_BACKGROUND);
+        studentTable.setBackground(StyledPanel.MAIN_BACKGROUND);
         studentTable.setForeground(Color.WHITE);
         studentTable.setGridColor(new Color(80, 80, 80));
         studentTable.setSelectionBackground(new Color(60, 60, 60));
@@ -69,12 +74,10 @@ public class ViewStudentsMenu extends StyledPanel {
         header.setForeground(Color.WHITE);
         header.setReorderingAllowed(false);
 
-     
         JScrollPane scrollPane = new JScrollPane(studentTable);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
 
-      
         cardLayout = new CardLayout();
         centerPanel = new JPanel(cardLayout);
         centerPanel.setOpaque(false);
@@ -82,16 +85,13 @@ public class ViewStudentsMenu extends StyledPanel {
 
         add(centerPanel, BorderLayout.CENTER);
 
- 
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
 
-   
         visualizeButton = new JButton("Visualize Grades");
         visualizeButton.addActionListener(e -> showGradeChart(students));
         buttonPanel.add(visualizeButton);
 
-      
         backButton = new JButton("Back to Table");
         backButton.setVisible(false);
         backButton.addActionListener(e -> {
@@ -146,7 +146,6 @@ public class ViewStudentsMenu extends StyledPanel {
             values.add(val);
         }
 
-      
         CategoryChart chart = new CategoryChartBuilder()
                 .width(800)
                 .height(400)
@@ -167,13 +166,11 @@ public class ViewStudentsMenu extends StyledPanel {
 
         chart.addSeries("GPA", courses, values);
 
-       
         JPanel chartPanel = new XChartPanel<>(chart);
         chartPanel.setOpaque(false);
         centerPanel.add(chartPanel, "CHART");
         cardLayout.show(centerPanel, "CHART");
 
-    
         visualizeButton.setVisible(false);
         backButton.setVisible(true);
     }

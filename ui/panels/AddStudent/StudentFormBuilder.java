@@ -20,7 +20,11 @@ public class StudentFormBuilder {
         StyledPanel mainPanel = StyledPanel.createMainPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setOpaque(false);
-        mainPanel.setBackgroundColor(StyledPanel.WELCOME_BACKGROUND);
+        mainPanel.setBackgroundColor(StyledPanel.MAIN_BACKGROUND);
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 1, StyledPanel.TEXT_GRAY), 
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)                 
+        ));
 
         JPanel alignedInfoPanel = new JPanel(new BorderLayout());
         alignedInfoPanel.setOpaque(false);
@@ -40,7 +44,7 @@ public class StudentFormBuilder {
         panel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(2, 5, 2, 5); 
+        gbc.insets = new Insets(2, 5, 2, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
         gbc.gridx = 0;

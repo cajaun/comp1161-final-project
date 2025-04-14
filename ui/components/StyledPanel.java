@@ -5,13 +5,13 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class StyledPanel extends JPanel {
-  
-    public static final Color SIDEBAR_BACKGROUND = Color.decode("#636B75");
-    public static final Color MAIN_BACKGROUND = Color.decode("#2B2B2B");
-    public static final Color WELCOME_BACKGROUND = Color.decode("#505D6A");
 
+    public static final Color SIDEBAR_BACKGROUND = Color.decode("#505D6A");
+    public static final Color MAIN_BACKGROUND = Color.decode("#636B75"); 
+    public static final Color TEXT_WHITE = Color.decode("#E6E6EA");
+    public static final Color TEXT_GRAY = Color.decode("#ABB3BA");
 
-    private Color backgroundColor = WELCOME_BACKGROUND;
+    private Color backgroundColor = MAIN_BACKGROUND;
     private Color borderColor = new Color(60, 60, 60);
     private int cornerRadius = 12;
 
@@ -19,28 +19,26 @@ public class StyledPanel extends JPanel {
         setOpaque(false);
         setPreferredSize(new Dimension(600, 400));
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-    
+
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    
-  
+
         Rectangle2D.Float shape = new Rectangle2D.Float(
                 0, 0, getWidth() - 1, getHeight() - 1);
-    
+
         g2d.setColor(backgroundColor);
         g2d.fill(shape);
-    
+
         g2d.setColor(borderColor);
         g2d.setStroke(new BasicStroke(1f));
         g2d.draw(shape);
-    
+
         g2d.dispose();
     }
-    
-
 
     public static StyledPanel createSidebarPanel() {
         StyledPanel panel = new StyledPanel();
@@ -51,10 +49,9 @@ public class StyledPanel extends JPanel {
         return panel;
     }
 
-
     public static StyledPanel createMainPanel() {
         StyledPanel panel = new StyledPanel();
-        panel.setBackgroundColor(WELCOME_BACKGROUND);
+        panel.setBackgroundColor(MAIN_BACKGROUND);
         panel.setBorderColor(new Color(40, 40, 40));
 
         return panel;
@@ -62,12 +59,11 @@ public class StyledPanel extends JPanel {
 
     public static StyledPanel createWelcomePanel() {
         StyledPanel panel = new StyledPanel();
-        panel.setBackgroundColor(WELCOME_BACKGROUND);
+        panel.setBackgroundColor(MAIN_BACKGROUND);
         panel.setBorderColor(new Color(40, 40, 40));
 
         return panel;
     }
-
 
     public Color getBackgroundColor() {
         return backgroundColor;

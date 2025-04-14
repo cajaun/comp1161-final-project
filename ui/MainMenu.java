@@ -9,6 +9,7 @@ import ui.components.StyledPanel;
 import ui.panels.AddStudent.AddStudentMenu;
 import ui.panels.EditStudent.EditStudentMenu;
 import ui.panels.ViewStudents.ViewStudentsMenu;
+import util.Fonts;
 import util.StudentUtils;
 
 import java.awt.*;
@@ -24,11 +25,11 @@ public class MainMenu {
     private Set<String> studentIDs = new HashSet<>();
     private JButton activeButton;
 
-    private EditStudentMenu editStudentMenu; 
+    private EditStudentMenu editStudentMenu;
 
     public MainMenu(JFrame existingFrame) {
         this.frame = existingFrame;
-        frame.getContentPane().removeAll(); 
+        frame.getContentPane().removeAll();
         frame.setTitle("Student Grade System");
         students = StudentUtils.loadStudents();
         try {
@@ -42,14 +43,17 @@ public class MainMenu {
         initializeMainPanel();
 
         frame.setVisible(true);
-        setActiveButton((JButton)((JPanel) frame.getContentPane().getComponent(0)).getComponent(0));
+        setActiveButton((JButton) ((JPanel) frame.getContentPane().getComponent(0)).getComponent(0));
     }
 
     private JPanel createSidebar() {
         JPanel sidebar = StyledPanel.createSidebarPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setPreferredSize(new Dimension(200, frame.getHeight()));
-        sidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        sidebar.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(StyledPanel.TEXT_GRAY, 1), // Colored border
+                BorderFactory.createEmptyBorder(40, 10, 10, 10) // Padding inside
+        ));
 
         JButton addStudentButton = createSidebarButton("Add Student", "add_icon.png");
         addStudentButton.addActionListener(e -> {
@@ -67,7 +71,7 @@ public class MainMenu {
         JButton editStudentsButton = createSidebarButton("Edit Students", "edit_icon.png");
         editStudentsButton.addActionListener(e -> {
             if (students.size() > 0) {
-                editStudentMenu.refresh(); 
+                editStudentMenu.refresh();
                 showPanel("EditStudents");
                 setActiveButton(editStudentsButton);
             } else {
@@ -99,7 +103,6 @@ public class MainMenu {
         addPanel("AddStudent", createAddStudentPanel());
         addPanel("ViewStudents", new ViewStudentsMenu(students));
 
-      
         editStudentMenu = new EditStudentMenu(this);
         addPanel("EditStudents", editStudentMenu);
     }
@@ -124,12 +127,12 @@ public class MainMenu {
     private JButton createSidebarButton(String text, String iconPath) {
         JButton button = new JButton(text);
         button.setHorizontalAlignment(SwingConstants.LEFT);
-        button.setFont(new Font("Roboto", Font.PLAIN, 12));
+        button.setFont(Fonts.OPEN_RUNDE.deriveFont(16f));
         button.setFocusPainted(false);
-        button.setForeground(Color.WHITE);
+        button.setForeground(StyledPanel.TEXT_WHITE);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setPreferredSize(new Dimension(200, 27));
-        button.setMaximumSize(new Dimension(200, 27));
+        button.setPreferredSize(new Dimension(200, 35));
+        button.setMaximumSize(new Dimension(200, 35));
         button.setContentAreaFilled(false);
         button.setOpaque(true);
         button.setBackground(new Color(0, 0, 0, 0));
@@ -142,7 +145,7 @@ public class MainMenu {
             activeButton.setBackground(new Color(0, 0, 0, 0));
         }
         activeButton = button;
-        activeButton.setBackground(Color.decode("#7F7F7F"));
+        activeButton.setBackground(StyledPanel.TEXT_GRAY);
     }
 
     public void addStudent(Student student) {

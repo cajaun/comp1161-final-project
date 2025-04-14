@@ -3,7 +3,7 @@ package ui;
 import javax.swing.*;
 import ui.components.RoundedButtonUI;
 import ui.components.StyledPanel;
-
+import util.Fonts;
 
 import java.awt.*;
 import java.io.File;
@@ -16,21 +16,8 @@ public class WelcomeScreen {
   private JFrame frame;
 
   public WelcomeScreen() {
-    Font openRundeFont = null;
 
-    try {
-      Path fontPath = Paths.get("assets", "OpenRunde-Semibold.otf");
-      openRundeFont = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath.toString()))
 
-          .deriveFont(20f);
-    } catch (FontFormatException | IOException e) {
-      e.printStackTrace();
-     
-    }
-
-    if (openRundeFont != null) {
-      UIManager.put("Label.font", openRundeFont);
-    }
 
     frame = new JFrame("Marked");
     frame.setSize(900, 600);
@@ -47,21 +34,21 @@ public class WelcomeScreen {
     logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
     JLabel welcomeLabel = new JLabel("Welcome to");
-    welcomeLabel.setFont(openRundeFont.deriveFont(16f));
+    welcomeLabel.setFont(Fonts.OPEN_RUNDE.deriveFont(16f));
     welcomeLabel.setForeground(Color.decode("#ABB3BA"));
     welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 5, 0));
 
     JLabel appNameLabel = new JLabel("Marked");
-    appNameLabel.setFont(openRundeFont.deriveFont(32f));
+    appNameLabel.setFont(Fonts.OPEN_RUNDE.deriveFont(32f));
     appNameLabel.setForeground(Color.decode("#E6E6EA"));
     appNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     appNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 
     JButton getStartedButton = new JButton("Get started →");
-    getStartedButton.setFont(openRundeFont.deriveFont(18f));
+    getStartedButton.setFont(Fonts.OPEN_RUNDE.deriveFont(18f));
     getStartedButton.setForeground(Color.WHITE);
-    getStartedButton.setBackground(Color.decode("#636B75"));
+    getStartedButton.setBackground(Color.decode("#505D6A"));
     getStartedButton.setFocusPainted(false);
     getStartedButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     getStartedButton.setPreferredSize(new Dimension(160, 40));

@@ -6,6 +6,7 @@ import models.Student;
 import ui.MainMenu;
 import ui.components.StyledPanel;
 import util.CourseLoader;
+import util.Fonts;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -35,9 +36,14 @@ public class AddStudentMenu extends StyledPanel {
 
 
         JLabel titleLabel = new JLabel("Add Student", SwingConstants.LEFT);
-        titleLabel.setFont(new Font("Roboto", Font.BOLD, 18));
+        titleLabel.setFont(Fonts.OPEN_RUNDE.deriveFont(16f));
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        titleLabel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(1, 0, 1, 1, StyledPanel.TEXT_GRAY), 
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)                 
+        ));
+        
+        
         add(titleLabel, BorderLayout.NORTH);
 
 
