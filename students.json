@@ -156,5 +156,28 @@
         "grade": "A"
       }
     ]
+  },
+  {
+    "firstName": "ca",
+    "lastName": "cs",
+    "id": "62016952",
+    "faculty": "Social Sciences",
+    "program": "css",
+    "enrollmentYear": 2023,
+    "gpa": 3.53,
+    "courses": [
+      {
+        "courseCode": "BIOL6413",
+        "grade": "A+"
+      },
+      {
+        "courseCode": "MGMT3060",
+        "grade": "B+"
+      },
+      {
+        "courseCode": "LAW6750",
+        "grade": "B"
+      }
+    ]
   }
 ]

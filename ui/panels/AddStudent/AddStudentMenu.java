@@ -4,12 +4,15 @@ import javax.swing.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import models.Student;
 import ui.MainMenu;
+import ui.components.StyledPanel;
 import util.CourseLoader;
 
 import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
-public class AddStudentMenu extends JPanel {
+public class AddStudentMenu extends StyledPanel {
     private JButton saveButton, closeButton;
     private MainMenu mainMenu;
     private List<String> courseList;
@@ -24,23 +27,41 @@ public class AddStudentMenu extends JPanel {
             e.printStackTrace();
         }
 
-        courseList = CourseLoader.loadCourses("comp1161-final-project\\data\\courseCode.json");
+        Path path = Paths.get("data", "courseCode.json");
+        courseList = CourseLoader.loadCourses(path.toString());
         formBuilder = new StudentFormBuilder();
 
-        setBackground(Color.decode("#1A1A1A"));
         setLayout(new BorderLayout());
 
-        JPanel formPanel = formBuilder.buildForm(courseList);
-        JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        wrapperPanel.add(formPanel);
-        add(wrapperPanel, BorderLayout.CENTER);
 
-        JPanel buttonPanel = buildButtonPanel();
+        JLabel titleLabel = new JLabel("Add Student", SwingConstants.LEFT);
+        titleLabel.setFont(new Font("Roboto", Font.BOLD, 18));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(titleLabel, BorderLayout.NORTH);
+
+
+        StyledPanel formPanel = formBuilder.buildForm(courseList); 
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS)); 
+
+
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); 
+
+    
+        formPanel.setPreferredSize(new Dimension(600, formPanel.getPreferredSize().height));
+        add(scrollPane, BorderLayout.CENTER);
+
+        StyledPanel buttonPanel = buildButtonPanel(); 
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private JPanel buildButtonPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    private StyledPanel buildButtonPanel() {
+        StyledPanel panel = new StyledPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panel.setPreferredSize(new Dimension(600, 50));
 
         saveButton = new JButton("Save");
         saveButton.addActionListener(new SaveStudentListener(
@@ -52,8 +73,7 @@ public class AddStudentMenu extends JPanel {
                 formBuilder.getFacultyComboBox(),
                 formBuilder.getCourseComboBoxes(),
                 formBuilder.getGradeComboBoxes(),
-                mainMenu
-        ));
+                mainMenu));
         panel.add(saveButton);
 
         closeButton = new JButton("Back");

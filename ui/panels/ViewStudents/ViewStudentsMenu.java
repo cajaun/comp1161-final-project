@@ -12,7 +12,7 @@ public class ViewStudentsMenu extends StyledPanel {
 
     public ViewStudentsMenu(List<Student> students) {
         super();
-        setBackgroundColor(StyledPanel.MAIN_BACKGROUND);
+        setBackgroundColor(StyledPanel.WELCOME_BACKGROUND);
         setLayout(new BorderLayout());
 
         String[] columnNames = {"ID", "First Name", "Last Name", "Faculty", "Program", "Enrollment Year", "GPA"};
@@ -36,8 +36,8 @@ public class ViewStudentsMenu extends StyledPanel {
             }
         };
 
-        // Dark theme styling
-        studentTable.setBackground(StyledPanel.MAIN_BACKGROUND);
+    
+        studentTable.setBackground(StyledPanel.WELCOME_BACKGROUND);
         studentTable.setForeground(Color.WHITE);
         studentTable.setGridColor(new Color(80, 80, 80));
         studentTable.setSelectionBackground(new Color(60, 60, 60));

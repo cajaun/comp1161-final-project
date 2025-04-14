@@ -2,7 +2,9 @@ package ui.panels.AddStudent;
 
 import javax.swing.*;
 import config.Constants;
+import ui.components.StyledPanel;
 import util.ComboBoxUtils;
+import util.CustomHeightComboBoxUI;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,68 +16,74 @@ public class StudentFormBuilder {
     private List<JComboBox<String>> courseComboBoxes = new ArrayList<>();
     private List<JComboBox<String>> gradeComboBoxes = new ArrayList<>();
 
-    public JPanel buildForm(List<String> courseList) {
-        JPanel mainPanel = new JPanel();
+    public StyledPanel buildForm(List<String> courseList) {
+        StyledPanel mainPanel = StyledPanel.createMainPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setOpaque(false);
+        mainPanel.setBackgroundColor(StyledPanel.WELCOME_BACKGROUND);
 
+        JPanel alignedInfoPanel = new JPanel(new BorderLayout());
+        alignedInfoPanel.setOpaque(false);
+        alignedInfoPanel.add(createInfoPanel(), BorderLayout.WEST);
+        mainPanel.add(alignedInfoPanel);
 
-        mainPanel.add(createSectionLabel("Student Information"));
-        mainPanel.add(wrapWithRoundedBorder(createInfoPanel()));
-        mainPanel.add(Box.createVerticalStrut(20));
-
-    
-        mainPanel.add(createSectionLabel("Courses & Grades"));
-        mainPanel.add(wrapWithRoundedBorder(createCoursePanel(courseList)));
+        JPanel alignedCoursePanel = new JPanel(new BorderLayout());
+        alignedCoursePanel.setOpaque(false);
+        alignedCoursePanel.add(createCoursePanel(courseList), BorderLayout.WEST);
+        mainPanel.add(alignedCoursePanel);
 
         return mainPanel;
     }
 
-    private JLabel createSectionLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(label.getFont().deriveFont(Font.BOLD, 14f));
-        label.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
-        return label;
-    }
-
-    private JPanel wrapWithRoundedBorder(JPanel inner) {
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(180, 180, 180), 1, true),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-        wrapper.setOpaque(false);
-        wrapper.add(inner, BorderLayout.CENTER);
-        return wrapper;
-    }
-
     private JPanel createInfoPanel() {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(2, 5, 2, 5); 
+        gbc.anchor = GridBagConstraints.WEST;
 
-        panel.add(new JLabel("Student ID:"));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Student ID:"), gbc);
+        gbc.gridx = 1;
         idField = new JTextField(15);
-        panel.add(idField);
+        panel.add(idField, gbc);
 
-        panel.add(new JLabel("Faculty:"));
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Faculty:"), gbc);
+        gbc.gridx = 1;
         facultyComboBox = new JComboBox<>(Constants.FACULTIES);
-        panel.add(facultyComboBox);
+        panel.add(facultyComboBox, gbc);
 
-        panel.add(new JLabel("First Name:"));
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("First Name:"), gbc);
+        gbc.gridx = 1;
         firstNameField = new JTextField(15);
-        panel.add(firstNameField);
+        panel.add(firstNameField, gbc);
 
-        panel.add(new JLabel("Last Name:"));
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Last Name:"), gbc);
+        gbc.gridx = 1;
         lastNameField = new JTextField(15);
-        panel.add(lastNameField);
+        panel.add(lastNameField, gbc);
 
-        panel.add(new JLabel("Program:"));
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Program:"), gbc);
+        gbc.gridx = 1;
         programField = new JTextField(15);
-        panel.add(programField);
+        panel.add(programField, gbc);
 
-        panel.add(new JLabel("Enrollment Year:"));
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Enrollment Year:"), gbc);
+        gbc.gridx = 1;
         enrollmentYearField = new JTextField(15);
-        panel.add(enrollmentYearField);
+        panel.add(enrollmentYearField, gbc);
 
         return panel;
     }
@@ -102,6 +110,7 @@ public class StudentFormBuilder {
             gbc.gridx = 1;
             JComboBox<String> courseComboBox = new JComboBox<>(courseList.toArray(new String[0]));
             courseComboBox.setEditable(true);
+            courseComboBox.setUI(new CustomHeightComboBoxUI(150));
             courseComboBox.setSelectedItem(null);
             ComboBoxUtils.makeSearchable(courseComboBox, courseList);
             courseComboBoxes.add(courseComboBox);
@@ -124,12 +133,35 @@ public class StudentFormBuilder {
         return panel;
     }
 
-    public JTextField getFirstNameField() { return firstNameField; }
-    public JTextField getLastNameField() { return lastNameField; }
-    public JTextField getIdField() { return idField; }
-    public JTextField getProgramField() { return programField; }
-    public JTextField getEnrollmentYearField() { return enrollmentYearField; }
-    public JComboBox<String> getFacultyComboBox() { return facultyComboBox; }
-    public List<JComboBox<String>> getCourseComboBoxes() { return courseComboBoxes; }
-    public List<JComboBox<String>> getGradeComboBoxes() { return gradeComboBoxes; }
+    public JTextField getFirstNameField() {
+        return firstNameField;
+    }
+
+    public JTextField getLastNameField() {
+        return lastNameField;
+    }
+
+    public JTextField getIdField() {
+        return idField;
+    }
+
+    public JTextField getProgramField() {
+        return programField;
+    }
+
+    public JTextField getEnrollmentYearField() {
+        return enrollmentYearField;
+    }
+
+    public JComboBox<String> getFacultyComboBox() {
+        return facultyComboBox;
+    }
+
+    public List<JComboBox<String>> getCourseComboBoxes() {
+        return courseComboBoxes;
+    }
+
+    public List<JComboBox<String>> getGradeComboBoxes() {
+        return gradeComboBoxes;
+    }
 }

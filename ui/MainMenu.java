@@ -24,9 +24,12 @@ public class MainMenu {
     private Set<String> studentIDs = new HashSet<>();
     private JButton activeButton;
 
-    private EditStudentMenu editStudentMenu; // Store instance to call refresh
+    private EditStudentMenu editStudentMenu; 
 
-    public MainMenu() {
+    public MainMenu(JFrame existingFrame) {
+        this.frame = existingFrame;
+        frame.getContentPane().removeAll(); 
+        frame.setTitle("Student Grade System");
         students = StudentUtils.loadStudents();
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
@@ -34,11 +37,7 @@ public class MainMenu {
             e.printStackTrace();
         }
 
-        frame = new JFrame("Student Grade System");
-        frame.setSize(900, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-
         frame.add(createSidebar(), BorderLayout.WEST);
         initializeMainPanel();
 
@@ -49,7 +48,6 @@ public class MainMenu {
     private JPanel createSidebar() {
         JPanel sidebar = StyledPanel.createSidebarPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBackground(Color.decode("#FF0000"));
         sidebar.setPreferredSize(new Dimension(200, frame.getHeight()));
         sidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -69,7 +67,7 @@ public class MainMenu {
         JButton editStudentsButton = createSidebarButton("Edit Students", "edit_icon.png");
         editStudentsButton.addActionListener(e -> {
             if (students.size() > 0) {
-                editStudentMenu.refresh(); // Prompt when navigating to Edit panel
+                editStudentMenu.refresh(); 
                 showPanel("EditStudents");
                 setActiveButton(editStudentsButton);
             } else {
@@ -101,7 +99,7 @@ public class MainMenu {
         addPanel("AddStudent", createAddStudentPanel());
         addPanel("ViewStudents", new ViewStudentsMenu(students));
 
-        // Initialize and store EditStudentMenu panel for refreshing later
+      
         editStudentMenu = new EditStudentMenu(this);
         addPanel("EditStudents", editStudentMenu);
     }
@@ -136,7 +134,6 @@ public class MainMenu {
         button.setOpaque(true);
         button.setBackground(new Color(0, 0, 0, 0));
         button.setUI(new RoundedButtonUI());
-
         return button;
     }
 
@@ -177,9 +174,5 @@ public class MainMenu {
 
     public Set<String> getStudentIDs() {
         return studentIDs;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainMenu::new);
     }
 }

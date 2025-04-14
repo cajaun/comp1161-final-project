@@ -2,6 +2,13 @@
   "configurations": [
     {
         "type": "java",
+        "name": "WelcomeScreen",
+        "request": "launch",
+        "mainClass": "ui.WelcomeScreen",
+        "projectName": "comp1161-final-project_2e3f8481"
+    },
+    {
+        "type": "java",
         "name": "MainMenu",
         "request": "launch",
         "mainClass": "ui.MainMenu",

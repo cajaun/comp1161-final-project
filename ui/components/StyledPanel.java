@@ -6,10 +6,12 @@ import java.awt.geom.Rectangle2D;
 
 public class StyledPanel extends JPanel {
     // Define default and themed background colors
-    public static final Color SIDEBAR_BACKGROUND = Color.decode("#5A5A5D");
+    public static final Color SIDEBAR_BACKGROUND = Color.decode("#636B75");
     public static final Color MAIN_BACKGROUND = Color.decode("#2B2B2B");
+    public static final Color WELCOME_BACKGROUND = Color.decode("#505D6A");
 
-    private Color backgroundColor = SIDEBAR_BACKGROUND;
+
+    private Color backgroundColor = WELCOME_BACKGROUND;
     private Color borderColor = new Color(60, 60, 60);
     private int cornerRadius = 12;
 
@@ -52,7 +54,15 @@ public class StyledPanel extends JPanel {
 
     public static StyledPanel createMainPanel() {
         StyledPanel panel = new StyledPanel();
-        panel.setBackgroundColor(MAIN_BACKGROUND);
+        panel.setBackgroundColor(WELCOME_BACKGROUND);
+        panel.setBorderColor(new Color(40, 40, 40));
+
+        return panel;
+    }
+
+    public static StyledPanel createWelcomePanel() {
+        StyledPanel panel = new StyledPanel();
+        panel.setBackgroundColor(WELCOME_BACKGROUND);
         panel.setBorderColor(new Color(40, 40, 40));
 
         return panel;

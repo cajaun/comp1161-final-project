@@ -21,19 +21,25 @@ public class RoundedButtonUI extends BasicButtonUI {
         // Background
         if (b.getModel().isPressed()) {
             g2.setColor(b.getBackground().darker());
+        } else if (b.getModel().isRollover()) {
+            g2.setColor(b.getBackground().brighter());
         } else {
             g2.setColor(b.getBackground());
         }
 
-        int arc = 8;
+        int arc = 16;
         g2.fillRoundRect(0, 0, b.getWidth(), b.getHeight(), arc, arc);
 
         // Text
         g2.setColor(b.getForeground());
         FontMetrics fm = g2.getFontMetrics();
-        int textX = 14;
+        String text = b.getText();
+
+        int textWidth = fm.stringWidth(text);
+        int textX = (b.getWidth() - textWidth) / 2;
         int textY = (b.getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-        g2.drawString(b.getText(), textX, textY);
+
+        g2.drawString(text, textX, textY);
 
         g2.dispose();
     }
