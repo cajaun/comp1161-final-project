@@ -1,5 +1,6 @@
 package ui.panels.ViewStudents;
 
+import models.Grade;
 import models.Student;
 import ui.components.StyledPanel;
 
@@ -7,6 +8,13 @@ import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.List;
+import java.util.ArrayList;
+
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.style.Styler;
 
 public class ViewStudentsMenu extends StyledPanel {
 
@@ -35,8 +43,7 @@ public class ViewStudentsMenu extends StyledPanel {
                 return false;
             }
         };
-
-    
+        
         studentTable.setBackground(StyledPanel.WELCOME_BACKGROUND);
         studentTable.setForeground(Color.WHITE);
         studentTable.setGridColor(new Color(80, 80, 80));
@@ -54,5 +61,92 @@ public class ViewStudentsMenu extends StyledPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         add(scrollPane, BorderLayout.CENTER);
+
+        // Panel for Visualize Button
+        JPanel visualizePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        visualizePanel.setOpaque(false);
+        JButton visualizeButton = new JButton("Visualize Grades");
+        visualizeButton.addActionListener(e -> showGradeChart(students));
+        visualizePanel.add(visualizeButton);
+        add(visualizePanel, BorderLayout.SOUTH);
+    }
+
+    private void showGradeChart(List<Student> students) {
+        String id = JOptionPane.showInputDialog(this, "Enter Student ID:");
+        if (id == null || id.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No Student ID entered.");
+            return;
+        }
+
+        Student found = null;
+        for (Student s : students) {
+            if (s.getId().equals(id.trim())) {
+                found = s;
+                break;
+            }
+        }
+
+        if (found == null) {
+            JOptionPane.showMessageDialog(this, "Student not found.");
+            return;
+        }
+
+        // Grade scale in order (A+ to F3) with numeric equivalents
+        String[] gradeScale = {
+            "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "F1", "F2", "F3"
+        };
+        double[] gradeValues = {
+            4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 0.0
+        };
+
+        List<String> courses = new ArrayList<>();
+        List<Double> values = new ArrayList<>();
+
+        for (Grade g : found.getcourses()) {
+            courses.add(g.getCourse());
+
+            double val = 0.0;
+            String gradeStr = g.getGrade();
+            for (int i = 0; i < gradeScale.length; i++) {
+                if (gradeScale[i].equals(gradeStr)) {
+                    val = gradeValues[i];
+                    break;
+                }
+            }
+            values.add(val);
+        }
+
+        // Create chart
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(800)
+                .height(400)
+                .title("Grades for Student ID: " + found.getId())
+                .xAxisTitle("Courses")
+                .yAxisTitle("GPA")
+                .build();
+
+        // Apply custom theme and styling
+        chart.getStyler().setChartBackgroundColor(Color.DARK_GRAY);
+        chart.getStyler().setPlotBackgroundColor(Color.DARK_GRAY);
+        chart.getStyler().setChartFontColor(Color.WHITE);
+        chart.getStyler().setAxisTickLabelsColor(Color.WHITE);
+        chart.getStyler().setPlotGridLinesColor(Color.GRAY);
+        chart.getStyler().setLegendVisible(false);
+        chart.getStyler().setXAxisLabelRotation(45);
+        chart.getStyler().setAvailableSpaceFill(0.8);
+
+        // Set axis title font 
+        chart.getStyler().setAxisTitleFont(new Font("Arial", Font.PLAIN, 14));
+
+        chart.addSeries("GPA", courses, values);
+
+        JPanel chartPanel = new XChartPanel<>(chart);
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Grade Visualization");
+        dialog.setModal(true);
+        dialog.getContentPane().add(chartPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 }

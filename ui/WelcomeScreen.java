@@ -22,7 +22,7 @@ public class WelcomeScreen {
 
     try {
   
-      openRundeFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/OpenRunde-Semibold.otf"))
+      openRundeFont = Font.createFont(Font.TRUETYPE_FONT, new File("comp1161-final-project\\assets\\OpenRunde-Semibold.otf"))
           .deriveFont(20f);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();
@@ -41,7 +41,7 @@ public class WelcomeScreen {
     JPanel contentPanel = StyledPanel.createWelcomePanel();
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-    ImageIcon logoIcon = new ImageIcon("assets/logo.png");
+    ImageIcon logoIcon = new ImageIcon("comp1161-final-project\\assets\\logo.png");
     Image logoImage = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
     JLabel logoLabel = new JLabel(new ImageIcon(logoImage));
     logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
