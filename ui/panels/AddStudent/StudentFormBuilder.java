@@ -10,20 +10,30 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code StudentFormBuilder} class is responsible for creating the UI form
+ * used to input student information, including personal details and course grades.
+ */
 public class StudentFormBuilder {
     private JTextField firstNameField, lastNameField, idField, programField, enrollmentYearField;
     private JComboBox<String> facultyComboBox;
     private List<JComboBox<String>> courseComboBoxes = new ArrayList<>();
     private List<JComboBox<String>> gradeComboBoxes = new ArrayList<>();
 
+    /**
+     * Builds the student information input form.
+     *
+     * @param courseList A list of available courses to populate the course selection dropdowns.
+     * @return A {@code StyledPanel} containing the student information form.
+     */
     public StyledPanel buildForm(List<String> courseList) {
         StyledPanel mainPanel = StyledPanel.createMainPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setOpaque(false);
         mainPanel.setBackgroundColor(StyledPanel.MAIN_BACKGROUND);
         mainPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 1, StyledPanel.TEXT_GRAY), 
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)                 
+                BorderFactory.createMatteBorder(0, 0, 1, 1, StyledPanel.TEXT_GRAY),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
         JPanel alignedInfoPanel = new JPanel(new BorderLayout());
@@ -39,6 +49,11 @@ public class StudentFormBuilder {
         return mainPanel;
     }
 
+    /**
+     * Creates the panel for inputting basic student information such as ID, faculty, and personal details.
+     *
+     * @return A {@code JPanel} containing the student's personal information fields.
+     */
     private JPanel createInfoPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
@@ -92,6 +107,13 @@ public class StudentFormBuilder {
         return panel;
     }
 
+    /**
+     * Creates the panel for inputting course selections and corresponding letter grades.
+     * It generates a fixed number of rows for course and grade selection.
+     *
+     * @param courseList A list of available courses to populate the course selection dropdowns.
+     * @return A {@code JPanel} containing the course and grade selection fields.
+     */
     private JPanel createCoursePanel(List<String> courseList) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
@@ -137,34 +159,74 @@ public class StudentFormBuilder {
         return panel;
     }
 
+    /**
+     * Retrieves the text field for the student's first name.
+     *
+     * @return The {@code JTextField} for the first name.
+     */
     public JTextField getFirstNameField() {
         return firstNameField;
     }
 
+    /**
+     * Retrieves the text field for the student's last name.
+     *
+     * @return The {@code JTextField} for the last name.
+     */
     public JTextField getLastNameField() {
         return lastNameField;
     }
 
+    /**
+     * Retrieves the text field for the student's ID.
+     *
+     * @return The {@code JTextField} for the student ID.
+     */
     public JTextField getIdField() {
         return idField;
     }
 
+    /**
+     * Retrieves the text field for the student's program.
+     *
+     * @return The {@code JTextField} for the program.
+     */
     public JTextField getProgramField() {
         return programField;
     }
 
+    /**
+     * Retrieves the text field for the student's enrollment year.
+     *
+     * @return The {@code JTextField} for the enrollment year.
+     */
     public JTextField getEnrollmentYearField() {
         return enrollmentYearField;
     }
 
+    /**
+     * Retrieves the combo box for selecting the student's faculty.
+     *
+     * @return The {@code JComboBox} for the faculty.
+     */
     public JComboBox<String> getFacultyComboBox() {
         return facultyComboBox;
     }
 
+    /**
+     * Retrieves the list of combo boxes for selecting courses.
+     *
+     * @return A {@code List} of {@code JComboBox<String>} for courses.
+     */
     public List<JComboBox<String>> getCourseComboBoxes() {
         return courseComboBoxes;
     }
 
+    /**
+     * Retrieves the list of combo boxes for selecting grades.
+     *
+     * @return A {@code List} of {@code JComboBox<String>} for grades.
+     */
     public List<JComboBox<String>> getGradeComboBoxes() {
         return gradeComboBoxes;
     }

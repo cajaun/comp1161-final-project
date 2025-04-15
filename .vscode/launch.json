@@ -5,6 +5,13 @@
         "name": "WelcomeScreen",
         "request": "launch",
         "mainClass": "ui.WelcomeScreen",
+        "projectName": "comp1161-final-project_cc1e9f2f"
+    },
+    {
+        "type": "java",
+        "name": "WelcomeScreen",
+        "request": "launch",
+        "mainClass": "ui.WelcomeScreen",
         "projectName": "comp1161-final-project_2e3f8481"
     },
     {

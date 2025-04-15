@@ -1183,5 +1183,36 @@
         "grade": "A+"
       }
     ]
+  },
+  {
+    "firstName": "Susan",
+    "lastName": "Storm",
+    "id": "620169000",
+    "faculty": "Science and Technology",
+    "program": "Information Technology",
+    "enrollmentYear": 2024,
+    "gpa": 3.46,
+    "courses": [
+      {
+        "courseCode": "COMP1126",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "COMP1127",
+        "grade": "B+"
+      },
+      {
+        "courseCode": "COMP1220",
+        "grade": "B+"
+      },
+      {
+        "courseCode": "COMP1210",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "COMP1161",
+        "grade": "B+"
+      }
+    ]
   }
 ]

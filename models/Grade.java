@@ -1,4 +1,10 @@
 package models;
+
+/**
+ * This class represents the grades of each student
+ * @param courseCode The code for a course that a student previously took
+ * @param grade The letter grade for a course
+ */
 public class Grade {
     private String courseCode;
     private String grade;
@@ -7,7 +13,7 @@ public class Grade {
         this.courseCode = courseCode;
         this.grade = grade;
     }
-    //test change
+    
     public String getCourse() {
         return courseCode;
     }
