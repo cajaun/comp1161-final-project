@@ -1183,5 +1183,28 @@
         "grade": "A+"
       }
     ]
+  },
+  {
+    "firstName": "Cajaun",
+    "lastName": "Campbell",
+    "id": "620169527",
+    "faculty": "Social Sciences",
+    "program": "Comp Sci",
+    "enrollmentYear": 2024,
+    "gpa": 3.67,
+    "courses": [
+      {
+        "courseCode": "MSBMVP",
+        "grade": "A+"
+      },
+      {
+        "courseCode": "MGMT6021",
+        "grade": "A-"
+      },
+      {
+        "courseCode": "RETH9006",
+        "grade": "B"
+      }
+    ]
   }
 ]
