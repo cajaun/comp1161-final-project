@@ -2,6 +2,15 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This constructor for the student class
+ * @param firstName The student's first name
+ * @param lastName The student's last name
+ * @param id The student's ID number
+ * @param faculty The student's main faculty
+ * @param program The student's major
+ * @param enrollmentYear The year the student began studies at the school
+ */
 public class Student {
     private String firstName;
     private String lastName;
@@ -22,7 +31,6 @@ public class Student {
         this.enrollmentYear = enrollmentYear;
         this.courses = new ArrayList<>();
     }
-
 
     public String getId() {
         return id;
@@ -72,7 +80,11 @@ public class Student {
     public List<Grade> getcourses() {
         return courses;
     }
-
+    /**
+     * For loop that obtains the grade per course for each student
+     * @param course The student's course
+     * @return The grade for the course, else nothing
+     */
     public Grade getGradeByCourse(String course) {
         for (Grade grade : courses) {
             if (grade.getCourse().equals(course)) {
@@ -87,7 +99,6 @@ public class Student {
     }
 
    
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

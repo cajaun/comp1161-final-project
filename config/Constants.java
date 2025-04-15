@@ -1,5 +1,7 @@
 package config;
-
+/**
+ * This class reserves letter grades and the names of faculties
+ */
 public class Constants {
     public static final String[] LETTER_GRADES = {
         "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "F1", "F2", "F3"

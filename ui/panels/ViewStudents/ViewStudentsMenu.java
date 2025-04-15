@@ -17,6 +17,10 @@ import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
+/**
+ * The {@code ViewStudentsMenu} class displays a table of student information and provides
+ * an option to visualize the grades of a selected student using a bar chart.
+ */
 public class ViewStudentsMenu extends StyledPanel {
 
     private JPanel centerPanel;
@@ -24,19 +28,23 @@ public class ViewStudentsMenu extends StyledPanel {
     private JPanel buttonPanel;
     private JButton visualizeButton, backButton;
 
+    /**
+     * Constructs a new {@code ViewStudentsMenu} with the provided list of students.
+     * Initializes the UI components, including the student table and the visualization button.
+     *
+     * @param students The list of {@code Student} objects to be displayed.
+     */
     public ViewStudentsMenu(List<Student> students) {
         super();
         setBackgroundColor(StyledPanel.MAIN_BACKGROUND);
         setLayout(new BorderLayout());
 
-  
-    JLabel titleLabel = new JLabel("Student Information", SwingConstants.LEFT);
-    titleLabel.setFont(Fonts.OPEN_RUNDE.deriveFont(16f)); 
-    titleLabel.setForeground(Color.WHITE);
-    titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
+        JLabel titleLabel = new JLabel("Student Information", SwingConstants.LEFT);
+        titleLabel.setFont(Fonts.OPEN_RUNDE.deriveFont(16f));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-
-    add(titleLabel, BorderLayout.NORTH);
+        add(titleLabel, BorderLayout.NORTH);
 
         String[] columnNames = { "ID", "First Name", "Last Name", "Faculty", "Program", "Enrollment Year", "GPA" };
         Object[][] data = new Object[students.size()][7];
@@ -104,6 +112,12 @@ public class ViewStudentsMenu extends StyledPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Displays a bar chart visualizing the grades of a specific student.
+     * Prompts the user to enter the Student ID to select the student for visualization.
+     *
+     * @param students The list of {@code Student} objects to search from.
+     */
     private void showGradeChart(List<Student> students) {
         String id = JOptionPane.showInputDialog(this, "Enter Student ID:");
         if (id == null || id.trim().isEmpty()) {
