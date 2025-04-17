@@ -176,8 +176,8 @@ public class MainMenu {
         button.setFocusPainted(false);
         button.setForeground(StyledPanel.TEXT_WHITE);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setPreferredSize(new Dimension(200, 35));
-        button.setMaximumSize(new Dimension(200, 35));
+        button.setPreferredSize(new Dimension(200, 30));
+        button.setMaximumSize(new Dimension(200, 30));
         button.setContentAreaFilled(false);
         button.setOpaque(true);
         button.setBackground(new Color(0, 0, 0, 0));

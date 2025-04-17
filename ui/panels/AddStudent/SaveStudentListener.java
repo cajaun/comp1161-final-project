@@ -102,6 +102,25 @@ public class SaveStudentListener implements ActionListener {
 
             mainMenu.addStudent(newStudent);
 
+            // Show success message
+        JOptionPane.showMessageDialog(mainMenu.getFrame(), "Student " + firstName + " " + lastName + " added successfully!");
+
+        // Reset the form fields
+        firstNameField.setText("");
+        lastNameField.setText("");
+        idField.setText("");
+        programField.setText("");
+        enrollmentYearField.setText("");
+        facultyComboBox.setSelectedIndex(0);
+
+        for (JComboBox<String> courseBox : courseComboBoxes) {
+            courseBox.setSelectedItem("");
+        }
+
+        for (JComboBox<String> gradeBox : gradeComboBoxes) {
+            gradeBox.setSelectedIndex(0);
+        }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(mainMenu.getFrame(), "Error: " + ex.getMessage());

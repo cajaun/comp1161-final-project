@@ -39,7 +39,7 @@ public class RoundedButtonUI extends BasicButtonUI {
         if (b.getModel().isPressed()) {
             g2.setColor(b.getBackground().darker());
         } else if (b.getModel().isRollover()) {
-            g2.setColor(b.getBackground().brighter());
+            g2.setColor(Color.decode("#636B75"));
         } else {
             g2.setColor(b.getBackground());
         }
